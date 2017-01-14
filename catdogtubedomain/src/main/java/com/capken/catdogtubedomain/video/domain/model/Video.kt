@@ -5,10 +5,11 @@ package com.capken.catdogtubedomain.video.domain.model
  */
 
 class Video (val videoId: String,
-                    val title: String,
-                    val imageUrl: String) {
+             val title: String,
+             val imageUrl: String,
+             val contentType: ContentType) {
 
     fun describe() : String {
-        return videoId + " " + title
+        return videoId + " " + title + " " + imageUrl + " " + contentType
     }
 }
