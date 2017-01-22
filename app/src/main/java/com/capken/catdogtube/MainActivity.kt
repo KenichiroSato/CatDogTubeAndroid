@@ -15,8 +15,8 @@ class MainActivity : AppCompatActivity() {
 
         val video:Video = Video("videoId", "title", "imageUrldesu", ContentType.cat)
 
-        val textView = findViewById(R.id.text_view) as TextView
-        textView.text = video.describe()
+        //val textView = findViewById(R.id.text_view) as TextView
+        //textView.text = video.describe()
 
     }
 }

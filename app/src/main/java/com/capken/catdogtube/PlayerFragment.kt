@@ -20,6 +20,7 @@ class PlayerFragment : YouTubePlayerFragment(), YouTubePlayer.OnInitializedListe
         super.onCreate(savedInstanceState)
 
         initialize(KEY, this)
+        setVideoId("Ndbe8XbpYVc")
     }
 
     override fun onDestroy() {
@@ -49,7 +50,8 @@ class PlayerFragment : YouTubePlayerFragment(), YouTubePlayer.OnInitializedListe
         player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT)
         //player.setOnFullscreenListener(activity as VideoListDemoActivity)
         if (!restored && videoId != null) {
-            player.cueVideo(videoId)
+            //player.cueVideo(videoId)
+            player.loadVideo(videoId)
         }
     }
 
