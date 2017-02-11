@@ -6,8 +6,8 @@ package com.capken.catdogtubedomain
 
 interface ThreadExecutorProtocol {
 
-    fun runOnMain(block:() -> Void)
+    fun runOnMain(block:() -> Unit)
 
-    fun runOnBackground(block: () -> Void)
+    fun runOnBackground(block: () -> Unit)
 
 }
