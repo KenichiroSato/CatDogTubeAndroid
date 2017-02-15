@@ -1,4 +1,4 @@
-package com.capken.catdogtube
+package com.capken.catdogtube.function.player
 
 import android.os.Bundle
 import com.google.android.youtube.player.YouTubeInitializationResult
