@@ -1,6 +1,5 @@
 package com.capken.catdogtube.function.video.presentation.segmented;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.capken.catdogtube.R;
+import com.capken.catdogtube.function.video.presentation.collection.VideoCollectionFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +27,14 @@ public final class SegmentedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.segmented_layout, container, false);
+        return inflater.inflate(R.layout.fragment_segmented, container, false);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Fragment f1 = new Fragment();
-        f1.getView()    .setBackgroundColor(Color.BLUE);
+        Fragment f1 = new VideoCollectionFragment();
+        //f1.getView()    .setBackgroundColor(Color.BLUE);
         Fragment f2 = new Fragment();
         //f2.getView().setBackgroundColor(Color.GREEN);
         mTabFragments.add(f1);
