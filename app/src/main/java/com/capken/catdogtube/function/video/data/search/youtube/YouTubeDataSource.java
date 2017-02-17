@@ -20,8 +20,8 @@ public final class YouTubeDataSource implements SearchVideoDataSourceProtocol {
     @Override
     public void searchVideos(@NotNull String searchWord, @NotNull Function1<? super List<YouTubeVideo>, Unit> completionHandler) {
 
-        YouTubeVideo v1 = new YouTubeVideo("id1", "title1", "url1");
-        YouTubeVideo v2 = new YouTubeVideo("id2", "title2", "url2");
+        YouTubeVideo v1 = new YouTubeVideo("id1", "title1", "http://www.yahoo.co.jp");
+        YouTubeVideo v2 = new YouTubeVideo("id2", "title2", "http://www.yahoo.co.jp");
         List<YouTubeVideo> list = new ArrayList<>();
         list.add(v1);
         list.add(v2);

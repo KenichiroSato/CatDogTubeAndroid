@@ -23,6 +23,8 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
 
     private ListView videoListView;
 
+    private VideoCollectionContract.Presenter presenter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,22 +38,22 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
     @Override
     public void onResume() {
         super.onResume();
-        showList();
+        presenter.set(this);
+        presenter.loadVideo(true);
     }
 
-    private void showList() {
-        VideoCollectionAdapter adapter = new VideoCollectionAdapter(getActivity());
-
-        if (videoListView != null) {
-            videoListView.setAdapter(adapter);
-        }
-
+    public void setPresenter(VideoCollectionContract.Presenter presenter) {
+        this.presenter = presenter;
     }
 
     //MARK VideoCollectionContract.View
     @Override
     public void show(@NotNull List<Video> videos) {
+        VideoCollectionAdapter adapter = new VideoCollectionAdapter(getActivity(), videos);
 
+        if (videoListView != null) {
+            videoListView.setAdapter(adapter);
+        }
     }
 
     @Override

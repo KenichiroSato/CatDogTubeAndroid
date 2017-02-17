@@ -12,6 +12,12 @@ import android.view.ViewGroup;
 
 import com.capken.catdogtube.R;
 import com.capken.catdogtube.function.video.presentation.collection.VideoCollectionFragment;
+import com.capken.catdogtubedomain.video.presentation.segmented.SegmentContract;
+import com.capken.catdogtubedomain.video.presentation.segmented.SegmentProtocol;
+import com.capken.catdogtubedomain.video.presentation.segmented.SegmentedContract;
+import com.capken.catdogtubedomain.video.presentation.segmented.SegmentsPresenter;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +26,11 @@ import java.util.List;
  * Created by ken on 2017/02/15..
  */
 
-public final class SegmentedFragment extends Fragment {
+public final class SegmentedFragment extends Fragment implements SegmentedContract.View {
 
     private List<Fragment> mTabFragments = new ArrayList<>();
+
+    private SegmentsPresenter presenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,13 +41,6 @@ public final class SegmentedFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Fragment f1 = new VideoCollectionFragment();
-        //f1.getView()    .setBackgroundColor(Color.BLUE);
-        Fragment f2 = new Fragment();
-        //f2.getView().setBackgroundColor(Color.GREEN);
-        mTabFragments.add(f1);
-        mTabFragments.add(f2);
-        setupTabs();
     }
 
     private void setupTabs() {
@@ -54,6 +55,34 @@ public final class SegmentedFragment extends Fragment {
             pager.setAdapter(adapter);
             tabLayout.setupWithViewPager(pager);
         }
+
+    }
+
+    public void setPresenter(SegmentsPresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    //MARK: SegmentedContract.View
+    @Override
+    public void show(@NotNull List<? extends SegmentProtocol> segments) {
+        for (final SegmentProtocol segment: segments ) {
+            mTabFragments.add((Fragment) segment.view());
+        }
+
+/*
+        Fragment f1 = new VideoCollectionFragment();
+        //f1.getView()    .setBackgroundColor(Color.BLUE);
+        Fragment f2 = new Fragment();
+        //f2.getView().setBackgroundColor(Color.GREEN);
+        mTabFragments.add(f1);
+        mTabFragments.add(f2);
+        */
+        setupTabs();
+
+    }
+
+    @Override
+    public void reorder(@NotNull List<? extends SegmentProtocol> segments) {
 
     }
 
