@@ -8,12 +8,18 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.capken.catdogtube.R;
+import com.capken.catdogtubedomain.video.domain.model.Video;
+import com.capken.catdogtubedomain.video.presentation.collection.VideoCollectionContract;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Created by 2ndDisplay on 2017/02/16.
  */
 
-public final class VideoCollectionFragment extends Fragment {
+public final class VideoCollectionFragment extends Fragment implements VideoCollectionContract.View {
 
     private ListView videoListView;
 
@@ -42,4 +48,24 @@ public final class VideoCollectionFragment extends Fragment {
 
     }
 
+    //MARK VideoCollectionContract.View
+    @Override
+    public void show(@NotNull List<Video> videos) {
+
+    }
+
+    @Override
+    public void showErrorUI() {
+
+    }
+
+    @Override
+    public void hideErrorUI() {
+
+    }
+
+    @Override
+    public void showLoadingIndicator() {
+
+    }
 }
