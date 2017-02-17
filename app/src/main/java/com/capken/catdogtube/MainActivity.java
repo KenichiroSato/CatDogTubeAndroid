@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.capken.catdogtube.function.player.PlayerFragment;
-import com.capken.catdogtubedomain.player.PlayVideoPresenter;
 
 /**
  * Created by 2ndDisplay on 2017/02/17.
