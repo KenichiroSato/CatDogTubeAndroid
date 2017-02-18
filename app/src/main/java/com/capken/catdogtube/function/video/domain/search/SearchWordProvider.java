@@ -14,19 +14,24 @@ import org.jetbrains.annotations.NotNull;
 
 public final class SearchWordProvider implements SearchWordProviderProtocol {
 
-    private Context context;
+    private Context mContext;
 
     public SearchWordProvider(Context context) {
-        this.context = context;
+        mContext = context;
     }
 
     @NotNull
     @Override
     public String searchWord(@NotNull ContentType content) {
-        int id = R.string.SEARCH_WORD_CAT;
-        if (content == ContentType.dog) {
-            id = R.string.SEARCH_WORD_DOG;
+        int id;
+        switch (content) {
+            case dog:
+                id = R.string.SEARCH_WORD_DOG;
+            case cat:
+                id = R.string.SEARCH_WORD_CAT;
+            default:
+                id = R.string.SEARCH_WORD_CAT;
         }
-        return context.getResources().getString(id);
+        return mContext.getResources().getString(id);
     }
 }

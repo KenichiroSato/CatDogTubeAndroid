@@ -2,7 +2,6 @@ package com.capken.catdogtube.function.video.presentation.collection;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,15 +21,14 @@ import java.util.List;
 
 final class VideoCollectionAdapter extends ArrayAdapter {
 
-    final private Context context;
-    final private List<Video> videos;
+    final private Context mContext;
+    final private List<Video> mVideos;
 
     public VideoCollectionAdapter(Context context, List<Video> videos) {
         super(context, 0);
-        this.context = context;
-        this.videos = videos;
+        mContext = context;
+        mVideos = videos;
     }
-
 
     @NonNull
     @Override
@@ -38,15 +36,15 @@ final class VideoCollectionAdapter extends ArrayAdapter {
         Log.d("tag", "position =" + position);
 
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.video_list_item, parent, false);
         }
 
         TextView itemName = (TextView) convertView.findViewById(R.id.item_name);
         ImageView itemIcon = (ImageView) convertView.findViewById(R.id.image_view);
 
-        if (position < videos.size()) {
-            itemName.setText(videos.get(position).getTitle());
+        if (position < mVideos.size()) {
+            itemName.setText(mVideos.get(position).getTitle());
         }
 
         return convertView;
@@ -54,8 +52,7 @@ final class VideoCollectionAdapter extends ArrayAdapter {
 
     @Override
     public int getCount() {
-        return videos.size();
+        return mVideos.size();
     }
-
 
 }

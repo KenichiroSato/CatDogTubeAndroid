@@ -1,18 +1,16 @@
 package com.capken.catdogtube.function.video.presentation.segmented;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.design.widget.TabLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.capken.catdogtube.R;
-import com.capken.catdogtube.function.video.presentation.collection.VideoCollectionFragment;
-import com.capken.catdogtubedomain.video.presentation.segmented.SegmentContract;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentProtocol;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentedContract;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentsPresenter;
@@ -30,7 +28,7 @@ public final class SegmentedFragment extends Fragment implements SegmentedContra
 
     private List<Fragment> mTabFragments = new ArrayList<>();
 
-    private SegmentsPresenter presenter;
+    private SegmentsPresenter mPresenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,25 +56,16 @@ public final class SegmentedFragment extends Fragment implements SegmentedContra
 
     }
 
-    public void setPresenter(SegmentsPresenter presenter) {
-        this.presenter = presenter;
+    public void setPresenter(SegmentsPresenter mPresenter) {
+        this.mPresenter = mPresenter;
     }
 
     //MARK: SegmentedContract.View
     @Override
     public void show(@NotNull List<? extends SegmentProtocol> segments) {
-        for (final SegmentProtocol segment: segments ) {
+        for (final SegmentProtocol segment : segments) {
             mTabFragments.add((Fragment) segment.view());
         }
-
-/*
-        Fragment f1 = new VideoCollectionFragment();
-        //f1.getView()    .setBackgroundColor(Color.BLUE);
-        Fragment f2 = new Fragment();
-        //f2.getView().setBackgroundColor(Color.GREEN);
-        mTabFragments.add(f1);
-        mTabFragments.add(f2);
-        */
         setupTabs();
 
     }

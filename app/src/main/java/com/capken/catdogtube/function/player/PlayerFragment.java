@@ -13,7 +13,8 @@ import org.jetbrains.annotations.NotNull;
  * Created by 2ndDisplay on 2017/02/17.
  */
 
-public final class PlayerFragment extends YouTubePlayerFragment implements YouTubePlayer.OnInitializedListener, PlayerContract.View {
+public final class PlayerFragment extends YouTubePlayerFragment
+        implements YouTubePlayer.OnInitializedListener, PlayerContract.View {
 
     private final String KEY = "AIzaSyBHs3tQKF67rsa-p94hVyk2a9qozOI0DJk";
 
@@ -26,7 +27,6 @@ public final class PlayerFragment extends YouTubePlayerFragment implements YouTu
         initialize(KEY, this);
         setVideoId("Ndbe8XbpYVc");
     }
-
 
     @Override
     public void onDestroy() {

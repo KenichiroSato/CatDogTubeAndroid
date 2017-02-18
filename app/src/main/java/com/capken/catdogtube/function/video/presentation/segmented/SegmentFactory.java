@@ -34,14 +34,14 @@ public final class SegmentFactory implements SegmentFactoryProtocol {
 
     @NotNull
     @Override
-    public List<SegmentProtocol> createSegments(@NotNull PlayerContract.Presenter playerPresenter) {
+    public List<SegmentProtocol> createSegments(@NotNull PlayerContract.Presenter presenter) {
         List<SegmentProtocol> list = new ArrayList<>();
-        list.add(searchSegment(ContentType.cat, playerPresenter));
-        list.add(searchSegment(ContentType.dog, playerPresenter));
+        list.add(searchSegment(ContentType.cat, presenter));
+        list.add(searchSegment(ContentType.dog, presenter));
         return list;
     }
 
-    private SearchSegment searchSegment(ContentType contentType, PlayerContract.Presenter playerPresenter) {
+    private SearchSegment searchSegment(ContentType contentType, PlayerContract.Presenter presenter) {
 
         VideoCollectionFragment fragment = new VideoCollectionFragment();
 
@@ -49,23 +49,11 @@ public final class SegmentFactory implements SegmentFactoryProtocol {
         SearchWordProvider provider = new SearchWordProvider(context);
         SearchVideoUseCase useCase = new SearchVideoUseCase(repo, contentType, provider);
 
-        LoadVideoPresenter presenter = new LoadVideoPresenter(useCase, new ThreadExecutor(), playerPresenter);
-        fragment.setPresenter(presenter);
+        LoadVideoPresenter videoPresenter =
+                new LoadVideoPresenter(useCase, new ThreadExecutor(), presenter);
+        fragment.setPresenter(videoPresenter);
 
-        return new SearchSegment(fragment, contentType, presenter);
-        /*
-        let vc = UIStoryboard.instantiateVcWithId(VideoCollectionVC.ID)
-        as! VideoCollectionVC
-
-        let useCase = SearchVideoUseCase(content: contentType,
-                repo:  SearchVideoRepository(dataSource: YouTubeDataSource()),
-        wordProvider:SearchWordProvider())
-        let presenter = LoadVideoPresenter(
-                useCase: useCase, executor:ThreadExecutor(), playerPresenter:playerPresenter)
-        vc.presenter = presenter
-
-        return SearchSegment(view: vc, contentType: contentType, presenter:presenter)
-        */
+        return new SearchSegment(fragment, contentType, videoPresenter);
     }
 
 }

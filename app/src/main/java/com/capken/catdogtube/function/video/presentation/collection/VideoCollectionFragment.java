@@ -21,16 +21,16 @@ import java.util.List;
 
 public final class VideoCollectionFragment extends Fragment implements VideoCollectionContract.View {
 
-    private ListView videoListView;
+    private ListView mVideoListView;
 
-    private VideoCollectionContract.Presenter presenter;
+    private VideoCollectionContract.Presenter mPresenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_video_collection, container, false);
-        videoListView = (ListView) view.findViewById(R.id.list_view);
+        mVideoListView = (ListView) view.findViewById(R.id.list_view);
 
         return view;
     }
@@ -38,12 +38,12 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
     @Override
     public void onResume() {
         super.onResume();
-        presenter.set(this);
-        presenter.loadVideo(true);
+        mPresenter.set(this);
+        mPresenter.loadVideo(true);
     }
 
-    public void setPresenter(VideoCollectionContract.Presenter presenter) {
-        this.presenter = presenter;
+    public void setPresenter(VideoCollectionContract.Presenter mPresenter) {
+        this.mPresenter = mPresenter;
     }
 
     //MARK VideoCollectionContract.View
@@ -51,8 +51,8 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
     public void show(@NotNull List<Video> videos) {
         VideoCollectionAdapter adapter = new VideoCollectionAdapter(getActivity(), videos);
 
-        if (videoListView != null) {
-            videoListView.setAdapter(adapter);
+        if (mVideoListView != null) {
+            mVideoListView.setAdapter(adapter);
         }
     }
 
