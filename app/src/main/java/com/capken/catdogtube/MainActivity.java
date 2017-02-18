@@ -26,24 +26,16 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     private void setupViews() {
-        PlayerFragment playerFragment = (PlayerFragment)getFragmentManager().findFragmentById(R.id.player_fragment);
+        PlayerFragment playerFragment =
+                (PlayerFragment)getFragmentManager().findFragmentById(R.id.player_fragment);
         PlayVideoPresenter videoPresenter = new PlayVideoPresenter(playerFragment);
 
-        SegmentedFragment segmentedFragment = (SegmentedFragment)getSupportFragmentManager().findFragmentById(R.id.container_segmented);
-        SegmentsPresenter segmentsPresenter = new SegmentsPresenter(segmentedFragment, videoPresenter, new SegmentFactory(this));
+        SegmentedFragment segmentedFragment =
+                (SegmentedFragment)getSupportFragmentManager().findFragmentById(R.id.container_segmented);
+        SegmentsPresenter segmentsPresenter =
+                new SegmentsPresenter(segmentedFragment, videoPresenter, new SegmentFactory(this));
         segmentedFragment.setPresenter(segmentsPresenter);
         segmentsPresenter.loadSegments();
-/*
-        let segmentedVC = UIStoryboard.instantiateVcWithId(SegmentedVC.ID) as! SegmentedVC
-        segmentedVC.view.frame = segmentContainerView.bounds
-        let presenter = SegmentsPresenter(view: segmentedVC as SegmentedContract_View,
-                playerPresenter: playerPresenter,
-                segmentFactory: SegmentFactory())
-        segmentedVC.presenter = presenter
-        segmentContainerView.addSubview(segmentedVC.view)
-        self.addChildViewController(segmentedVC)
-        segmentedVC.didMove(toParentViewController: self)
-        */
 
         Log.d("tag", "setupViews");
     }
