@@ -5,10 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.capken.catdogtube.function.player.PlayerFragment;
+import com.capken.catdogtube.function.video.presentation.collection.VideoCollectionFragment;
 import com.capken.catdogtube.function.video.presentation.segmented.SegmentFactory;
 import com.capken.catdogtube.function.video.presentation.segmented.SegmentedFragment;
 import com.capken.catdogtubedomain.player.PlayVideoPresenter;
 import com.capken.catdogtubedomain.player.PlayerContract;
+import com.capken.catdogtubedomain.video.presentation.collection.LoadVideoPresenter;
+import com.capken.catdogtubedomain.video.presentation.collection.VideoCollectionContract;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentedContract;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentsPresenter;
 
@@ -18,10 +21,12 @@ import com.capken.catdogtubedomain.video.presentation.segmented.SegmentsPresente
 
 public final class MainActivity extends AppCompatActivity implements
         SegmentedFragment.PresenterOwner,
-        PlayerFragment.PresenterOwner {
+        PlayerFragment.PresenterOwner,
+        VideoCollectionFragment.PresenterOwner {
 
-    private PlayVideoPresenter mPlayerPresenter;
-    private SegmentsPresenter mSegmentsPresenter;
+    private PlayerContract.Presenter mPlayerPresenter;
+    private SegmentedContract.Presenter mSegmentsPresenter;
+    private VideoCollectionContract.Presenter mVideoCollectionPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,13 @@ public final class MainActivity extends AppCompatActivity implements
     public void bindToPresenter(PlayerContract.View view) {
         if (mPlayerPresenter == null) {
             mPlayerPresenter = new PlayVideoPresenter(view);
+        }
+    }
+
+    @Override
+    public void bindToPresenter(VideoCollectionContract.View view) {
+        if (mVideoCollectionPresenter == null) {
+            mVideoCollectionPresenter = new LoadVideoPresenter()
         }
     }
 }

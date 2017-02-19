@@ -1,5 +1,6 @@
 package com.capken.catdogtube.function.video.presentation.collection;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.capken.catdogtube.R;
+import com.capken.catdogtube.function.video.presentation.segmented.SegmentedFragment;
 import com.capken.catdogtubedomain.video.domain.model.Video;
 import com.capken.catdogtubedomain.video.presentation.collection.VideoCollectionContract;
 
@@ -21,9 +23,28 @@ import java.util.List;
 
 public final class VideoCollectionFragment extends Fragment implements VideoCollectionContract.View {
 
+    public interface PresenterOwner {
+        void bindToPresenter(VideoCollectionContract.View view);
+    }
+
     private ListView mVideoListView;
 
     private VideoCollectionContract.Presenter mPresenter;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof SegmentedFragment.PresenterOwner) {
+            SegmentedFragment.PresenterOwner owner = (SegmentedFragment.PresenterOwner) context;
+            owner.bindToPresenter(this);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mPresenter = null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
