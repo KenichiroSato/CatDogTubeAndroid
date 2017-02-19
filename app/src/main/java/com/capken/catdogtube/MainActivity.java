@@ -8,35 +8,41 @@ import com.capken.catdogtube.function.player.PlayerFragment;
 import com.capken.catdogtube.function.video.presentation.segmented.SegmentFactory;
 import com.capken.catdogtube.function.video.presentation.segmented.SegmentedFragment;
 import com.capken.catdogtubedomain.player.PlayVideoPresenter;
+import com.capken.catdogtubedomain.player.PlayerContract;
+import com.capken.catdogtubedomain.video.presentation.segmented.SegmentedContract;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentsPresenter;
 
 /**
  * Created by 2ndDisplay on 2017/02/17.
  */
 
-public final class MainActivity extends AppCompatActivity {
+public final class MainActivity extends AppCompatActivity implements
+        SegmentedFragment.PresenterOwner,
+        PlayerFragment.PresenterOwner {
+
+    private PlayVideoPresenter mPlayerPresenter;
+    private SegmentsPresenter mSegmentsPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
-
-        setupViews();
     }
 
-    private void setupViews() {
-        PlayerFragment playerFragment =
-                (PlayerFragment)getFragmentManager().findFragmentById(R.id.player_fragment);
-        PlayVideoPresenter videoPresenter = new PlayVideoPresenter(playerFragment);
+    @Override
+    public void bindToPresenter(SegmentedContract.View view) {
+        if (mSegmentsPresenter == null) {
+            mSegmentsPresenter =
+                    new SegmentsPresenter(view, mPlayerPresenter, new SegmentFactory(this));
+            view.setPresenter(mSegmentsPresenter);
+        }
+    }
 
-        SegmentedFragment segmentedFragment =
-                (SegmentedFragment)getSupportFragmentManager().findFragmentById(R.id.container_segmented);
-        SegmentsPresenter segmentsPresenter =
-                new SegmentsPresenter(segmentedFragment, videoPresenter, new SegmentFactory(this));
-        segmentedFragment.setPresenter(segmentsPresenter);
-        segmentsPresenter.loadSegments();
-
-        Log.d("tag", "setupViews");
+    @Override
+    public void bindToPresenter(PlayerContract.View view) {
+        if (mPlayerPresenter == null) {
+            mPlayerPresenter = new PlayVideoPresenter(view);
+        }
     }
 }

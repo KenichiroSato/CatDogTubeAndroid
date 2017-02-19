@@ -6,6 +6,9 @@ package com.capken.catdogtubedomain.video.presentation.segmented
 
 interface SegmentedContract {
     interface View {
+
+        fun setPresenter(presenter: SegmentedContract.Presenter)
+
         fun show(segments: List<SegmentProtocol>)
 
         fun reorder(segments: List<SegmentProtocol>)
