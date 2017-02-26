@@ -9,9 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.capken.catdogtube.R;
+import com.capken.catdogtube.function.video.presentation.segmented.SegmentFactory;
 import com.capken.catdogtube.function.video.presentation.segmented.SegmentedFragment;
+import com.capken.catdogtubedomain.video.domain.model.ContentType;
 import com.capken.catdogtubedomain.video.domain.model.Video;
 import com.capken.catdogtubedomain.video.presentation.collection.VideoCollectionContract;
+import com.capken.catdogtubedomain.video.presentation.segmented.SegmentedContract;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +27,7 @@ import java.util.List;
 public final class VideoCollectionFragment extends Fragment implements VideoCollectionContract.View {
 
     public interface PresenterOwner {
-        void bindToPresenter(VideoCollectionContract.View view);
+        void bindToPresenter(VideoCollectionContract.View view, ContentType type, int index);
     }
 
     private ListView mVideoListView;
@@ -34,9 +37,11 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SegmentedFragment.PresenterOwner) {
-            SegmentedFragment.PresenterOwner owner = (SegmentedFragment.PresenterOwner) context;
-            owner.bindToPresenter(this);
+        if (context instanceof VideoCollectionFragment.PresenterOwner) {
+            VideoCollectionFragment.PresenterOwner owner = (VideoCollectionFragment.PresenterOwner) context;
+            ContentType type = (ContentType) getArguments().getSerializable(SegmentFactory.KEY_CONTENT_TYPE);
+            int index = getArguments().getInt(SegmentFactory.KEY_INDEX);
+            owner.bindToPresenter(this, type, index);
         }
     }
 
@@ -59,15 +64,15 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.set(this);
         mPresenter.loadVideo(true);
     }
 
-    public void setPresenter(VideoCollectionContract.Presenter mPresenter) {
-        this.mPresenter = mPresenter;
+    //MARK VideoCollectionContract.View
+    @Override
+    public void setPresenter(VideoCollectionContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 
-    //MARK VideoCollectionContract.View
     @Override
     public void show(@NotNull List<Video> videos) {
         VideoCollectionAdapter adapter = new VideoCollectionAdapter(getActivity(), videos);

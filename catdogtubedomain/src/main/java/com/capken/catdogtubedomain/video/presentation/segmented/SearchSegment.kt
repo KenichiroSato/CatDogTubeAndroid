@@ -7,8 +7,7 @@ import com.capken.catdogtubedomain.video.domain.model.ContentType
  */
 
  class SearchSegment(val _view:SegmentContract.View,
-                     internal val contentType:ContentType,
-                     val presenter: SegmentContract.Presenter) : SegmentProtocol {
+                     internal val contentType:ContentType) : SegmentProtocol {
 
     //MARK: SegmentProtocol
     override fun iconName(): String {

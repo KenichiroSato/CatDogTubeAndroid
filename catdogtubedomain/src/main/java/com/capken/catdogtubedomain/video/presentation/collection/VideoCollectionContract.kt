@@ -11,6 +11,9 @@ import com.capken.catdogtubedomain.video.presentation.segmented.SegmentContract
 interface VideoCollectionContract {
 
     interface View: SegmentContract.View {
+
+        fun setPresenter(presenter: VideoCollectionContract.Presenter)
+
         fun show(videos:List<Video>)
 
         fun showErrorUI()
@@ -21,7 +24,6 @@ interface VideoCollectionContract {
     }
 
     interface Presenter: SegmentContract.Presenter {
-        fun set(view:VideoCollectionContract.View)
 
         fun loadVideo(withFullScreenIndicator:Boolean)
 
