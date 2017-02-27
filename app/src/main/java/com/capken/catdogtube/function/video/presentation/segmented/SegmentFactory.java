@@ -28,12 +28,12 @@ public final class SegmentFactory implements SegmentFactoryProtocol {
     @Override
     public List<SegmentProtocol> createSegments(@NotNull PlayerContract.Presenter presenter) {
         List<SegmentProtocol> list = new ArrayList<>();
-        list.add(searchSegment(0, ContentType.cat, presenter));
-        list.add(searchSegment(1, ContentType.dog, presenter));
+        list.add(searchSegment(0, ContentType.cat));
+        list.add(searchSegment(1, ContentType.dog));
         return list;
     }
 
-    private SearchSegment searchSegment(int index, ContentType contentType, PlayerContract.Presenter presenter) {
+    private SearchSegment searchSegment(int index, ContentType contentType) {
 
         VideoCollectionFragment fragment = new VideoCollectionFragment();
         Bundle arguments = new Bundle();

@@ -14,6 +14,10 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
                          private val executor: ThreadExecutorProtocol,
                          var playerPresenter: PlayerContract.Presenter) : VideoCollectionContract.Presenter {
 
+    init {
+        view.setPresenter(this)
+    }
+
         // If true, top contents of this presenter' view will played when app is launched.
     private var isPrimal = false
 

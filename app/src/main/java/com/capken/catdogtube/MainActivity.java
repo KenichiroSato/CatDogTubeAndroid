@@ -49,7 +49,6 @@ public final class MainActivity extends AppCompatActivity implements
         if (mSegmentsPresenter == null) {
             mSegmentsPresenter =
                     new SegmentsPresenter(view, mPlayerPresenter, new SegmentFactory());
-            view.setPresenter(mSegmentsPresenter);
         }
     }
 
@@ -73,7 +72,6 @@ public final class MainActivity extends AppCompatActivity implements
             if (index == 0) {
                 presenter.markAsPrimal();
             }
-            view.setPresenter(presenter);
             mVideoCollectionPresenters.put(index, presenter);
         }
     }
