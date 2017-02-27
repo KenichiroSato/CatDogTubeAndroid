@@ -1,16 +1,10 @@
 package com.capken.catdogtube.function.video.presentation.segmented;
 
-import android.content.Context;
+import android.os.Bundle;
 
-import com.capken.catdogtube.common.ThreadExecutor;
-import com.capken.catdogtube.function.video.data.search.youtube.YouTubeDataSource;
-import com.capken.catdogtube.function.video.domain.search.SearchWordProvider;
 import com.capken.catdogtube.function.video.presentation.collection.VideoCollectionFragment;
 import com.capken.catdogtubedomain.player.PlayerContract;
 import com.capken.catdogtubedomain.video.domain.model.ContentType;
-import com.capken.catdogtubedomain.video.domain.search.SearchVideoRepository;
-import com.capken.catdogtubedomain.video.domain.search.SearchVideoUseCase;
-import com.capken.catdogtubedomain.video.presentation.collection.LoadVideoPresenter;
 import com.capken.catdogtubedomain.video.presentation.segmented.SearchSegment;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentFactoryProtocol;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentProtocol;
@@ -26,34 +20,28 @@ import java.util.List;
 
 public final class SegmentFactory implements SegmentFactoryProtocol {
 
-    private Context context;
+    public static final String KEY_CONTENT_TYPE = "key.contenttype";
+    public static final String KEY_INDEX = "key.index";
 
-    public SegmentFactory(Context context) {
-        this.context = context;
-    }
 
     @NotNull
     @Override
     public List<SegmentProtocol> createSegments(@NotNull PlayerContract.Presenter presenter) {
         List<SegmentProtocol> list = new ArrayList<>();
-        list.add(searchSegment(ContentType.cat, presenter));
-        list.add(searchSegment(ContentType.dog, presenter));
+        list.add(searchSegment(0, ContentType.cat));
+        list.add(searchSegment(1, ContentType.dog));
         return list;
     }
 
-    private SearchSegment searchSegment(ContentType contentType, PlayerContract.Presenter presenter) {
+    private SearchSegment searchSegment(int index, ContentType contentType) {
 
         VideoCollectionFragment fragment = new VideoCollectionFragment();
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(SegmentFactory.KEY_CONTENT_TYPE, contentType);
+        arguments.putInt(SegmentFactory.KEY_INDEX, index);
+        fragment.setArguments(arguments);
 
-        SearchVideoRepository repo = new SearchVideoRepository(new YouTubeDataSource());
-        SearchWordProvider provider = new SearchWordProvider(context);
-        SearchVideoUseCase useCase = new SearchVideoUseCase(repo, contentType, provider);
-
-        LoadVideoPresenter videoPresenter =
-                new LoadVideoPresenter(useCase, new ThreadExecutor(), presenter);
-        fragment.setPresenter(videoPresenter);
-
-        return new SearchSegment(fragment, contentType, videoPresenter);
+        return new SearchSegment(fragment, contentType);
     }
 
 }

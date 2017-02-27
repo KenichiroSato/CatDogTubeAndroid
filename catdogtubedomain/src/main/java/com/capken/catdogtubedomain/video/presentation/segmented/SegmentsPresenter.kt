@@ -10,6 +10,10 @@ class SegmentsPresenter (private var view: SegmentedContract.View,
                          private val playerPresenter: PlayerContract.Presenter,
                          private val segmentFactory: SegmentFactoryProtocol): SegmentedContract.Presenter {
 
+    init {
+        view.setPresenter(this)
+    }
+
     private var segments: List<SegmentProtocol> = emptyList()
 
     //private var notificationAdopter: TeamNotificationContract_ReceiveAdopter?

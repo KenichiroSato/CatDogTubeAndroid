@@ -1,11 +1,13 @@
 package com.capken.catdogtube.function.video.presentation.segmented;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +15,6 @@ import android.view.ViewGroup;
 import com.capken.catdogtube.R;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentProtocol;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentedContract;
-import com.capken.catdogtubedomain.video.presentation.segmented.SegmentsPresenter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -26,9 +27,13 @@ import java.util.List;
 
 public final class SegmentedFragment extends Fragment implements SegmentedContract.View {
 
+    public interface PresenterOwner {
+        void bindToPresenter(SegmentedContract.View view);
+    }
+
     private List<Fragment> mTabFragments = new ArrayList<>();
 
-    private SegmentsPresenter mPresenter;
+    private SegmentedContract.Presenter mPresenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,8 +42,25 @@ public final class SegmentedFragment extends Fragment implements SegmentedContra
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof PresenterOwner) {
+            PresenterOwner owner = (PresenterOwner) context;
+            owner.bindToPresenter(this);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mPresenter = null;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d("tag", "onActivityCreated");
+        mPresenter.loadSegments();
     }
 
     private void setupTabs() {
@@ -56,11 +78,13 @@ public final class SegmentedFragment extends Fragment implements SegmentedContra
 
     }
 
-    public void setPresenter(SegmentsPresenter mPresenter) {
-        this.mPresenter = mPresenter;
+    //MARK: SegmentedContract.View
+    @Override
+    public void setPresenter(@NotNull SegmentedContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 
-    //MARK: SegmentedContract.View
+
     @Override
     public void show(@NotNull List<? extends SegmentProtocol> segments) {
         for (final SegmentProtocol segment : segments) {

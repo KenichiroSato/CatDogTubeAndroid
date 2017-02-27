@@ -1,5 +1,6 @@
 package com.capken.catdogtube.function.player;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import com.capken.catdogtubedomain.player.PlayerContract;
@@ -18,8 +19,28 @@ public final class PlayerFragment extends YouTubePlayerFragment
 
     private final String KEY = "AIzaSyBHs3tQKF67rsa-p94hVyk2a9qozOI0DJk";
 
-    private YouTubePlayer player;
-    private String videoId = "";
+    public interface PresenterOwner {
+        void bindToPresenter(PlayerContract.View view);
+    }
+
+    private YouTubePlayer mPlayer;
+    private String mVideoId = "";
+    private PlayerContract.Presenter mPresenter;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof PlayerFragment.PresenterOwner) {
+            PlayerFragment.PresenterOwner owner = (PlayerFragment.PresenterOwner) context;
+            owner.bindToPresenter(this);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mPresenter = null;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,44 +51,44 @@ public final class PlayerFragment extends YouTubePlayerFragment
 
     @Override
     public void onDestroy() {
-        if (player != null) {
-            player.release();
+        if (mPlayer != null) {
+            mPlayer.release();
         }
         super.onDestroy();
     }
 
 
-    private void setVideoId(String videoId) {
-        if (videoId != null && videoId != this.videoId) {
-            this.videoId = videoId;
-            if (player != null) {
-                player.cueVideo(videoId);
+    private void setVideoId(String mVideoId) {
+        if (mVideoId != null && mVideoId != this.mVideoId) {
+            this.mVideoId = mVideoId;
+            if (mPlayer != null) {
+                mPlayer.cueVideo(mVideoId);
             }
         }
     }
 
     public void pause() {
-        if (player != null) {
-            player.pause();
+        if (mPlayer != null) {
+            mPlayer.pause();
         }
     }
 
     //MARK: YouTubePlayer.OnInitializedListener
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean restored) {
-        this.player = youTubePlayer;
-        player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
-        //player.setOnFullscreenListener(activity as VideoListDemoActivity)
-        if (!restored && videoId != null) {
-            //player.cueVideo(videoId);
-            player.loadVideo(videoId);
+        this.mPlayer = youTubePlayer;
+        mPlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
+        //mPlayer.setOnFullscreenListener(activity as VideoListDemoActivity)
+        if (!restored && mVideoId != null) {
+            //mPlayer.cueVideo(mVideoId);
+            mPlayer.loadVideo(mVideoId);
         }
 
     }
 
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-        this.player = null;
+        this.mPlayer = null;
     }
 
 
