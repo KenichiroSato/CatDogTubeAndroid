@@ -1,17 +1,10 @@
 package com.capken.catdogtube.function.video.presentation.segmented;
 
-import android.content.Context;
 import android.os.Bundle;
 
-import com.capken.catdogtube.common.ThreadExecutor;
-import com.capken.catdogtube.function.video.data.search.youtube.YouTubeDataSource;
-import com.capken.catdogtube.function.video.domain.search.SearchWordProvider;
 import com.capken.catdogtube.function.video.presentation.collection.VideoCollectionFragment;
 import com.capken.catdogtubedomain.player.PlayerContract;
 import com.capken.catdogtubedomain.video.domain.model.ContentType;
-import com.capken.catdogtubedomain.video.domain.search.SearchVideoRepository;
-import com.capken.catdogtubedomain.video.domain.search.SearchVideoUseCase;
-import com.capken.catdogtubedomain.video.presentation.collection.LoadVideoPresenter;
 import com.capken.catdogtubedomain.video.presentation.segmented.SearchSegment;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentFactoryProtocol;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentProtocol;
