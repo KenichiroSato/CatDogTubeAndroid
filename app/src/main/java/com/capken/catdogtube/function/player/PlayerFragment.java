@@ -3,6 +3,7 @@ package com.capken.catdogtube.function.player;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.capken.catdogtube.function.video.data.search.youtube.YouTubeInfo;
 import com.capken.catdogtubedomain.player.PlayerContract;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -16,8 +17,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class PlayerFragment extends YouTubePlayerFragment
         implements YouTubePlayer.OnInitializedListener, PlayerContract.View {
-
-    private final String KEY = "AIzaSyBHs3tQKF67rsa-p94hVyk2a9qozOI0DJk";
 
     public interface PresenterOwner {
         void bindToPresenter(PlayerContract.View view);
@@ -45,7 +44,7 @@ public final class PlayerFragment extends YouTubePlayerFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initialize(KEY, this);
+        initialize(YouTubeInfo.INFO, this);
         setVideoId("Ndbe8XbpYVc");
     }
 
