@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.capken.catdogtubedomain.video.data.YouTubeVideo;
 import com.capken.catdogtubedomain.video.domain.search.SearchVideoDataSourceProtocol;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +30,7 @@ public final class YouTubeDataSource implements SearchVideoDataSourceProtocol {
 
     @Override
     public void searchVideos(@NotNull String searchWord,
-                             @NotNull Function1<? super List<YouTubeVideo>, Unit> completionHandler) {
+                             @NotNull final Function1<? super List<YouTubeVideo>, Unit> completionHandler) {
 
         OkHttpClient client = new OkHttpClient();
         HttpUrl url = new HttpUrl.Builder()
@@ -59,21 +61,14 @@ public final class YouTubeDataSource implements SearchVideoDataSourceProtocol {
                 // リクエスト成功時の処理
                 // ステータスコードが200かどうか
                 if (response.code() == 200) {
-                    Log.d("tag", "res sucucess=" + response.body().string());
-                    // レスポンスが200(OK)だった時の処理
+                    List<YouTubeVideo> videos = YouTubeDataParser.parse(response.body().string());
+                    completionHandler.invoke(videos);
                 } else {
                     Log.d("tag", "res=" + response.toString());
                     // レスポンスが200(OK)以外だった時の処理
                 }
             }
         });
-
-        YouTubeVideo v1 = new YouTubeVideo("id1", "title1", "http://www.yahoo.co.jp");
-        YouTubeVideo v2 = new YouTubeVideo("id2", "title2", "http://www.yahoo.co.jp");
-        List<YouTubeVideo> list = new ArrayList<>();
-        list.add(v1);
-        list.add(v2);
-        completionHandler.invoke(list);
     }
 
 
