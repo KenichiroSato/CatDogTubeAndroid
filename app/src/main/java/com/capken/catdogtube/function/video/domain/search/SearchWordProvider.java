@@ -27,8 +27,10 @@ public final class SearchWordProvider implements SearchWordProviderProtocol {
         switch (content) {
             case dog:
                 id = R.string.SEARCH_WORD_DOG;
+                break;
             case cat:
                 id = R.string.SEARCH_WORD_CAT;
+                break;
             default:
                 id = R.string.SEARCH_WORD_CAT;
         }
