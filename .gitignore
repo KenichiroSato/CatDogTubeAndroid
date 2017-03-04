@@ -41,4 +41,3 @@ captures/
 .DS_Store
 
 #java
-app/src/main/java/com/capken/catdogtube/function/video/data/search/youtube/YouTubeInfo.java
