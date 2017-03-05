@@ -10,11 +10,9 @@ import android.widget.ListView;
 
 import com.capken.catdogtube.R;
 import com.capken.catdogtube.function.video.presentation.segmented.SegmentFactory;
-import com.capken.catdogtube.function.video.presentation.segmented.SegmentedFragment;
 import com.capken.catdogtubedomain.video.domain.model.ContentType;
 import com.capken.catdogtubedomain.video.domain.model.Video;
 import com.capken.catdogtubedomain.video.presentation.collection.VideoCollectionContract;
-import com.capken.catdogtubedomain.video.presentation.segmented.SegmentedContract;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -75,7 +73,7 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
 
     @Override
     public void show(@NotNull List<Video> videos) {
-        VideoCollectionAdapter adapter = new VideoCollectionAdapter(getActivity(), videos);
+        VideoCollectionAdapter adapter = new VideoCollectionAdapter(getActivity(), videos, mPresenter);
 
         if (mVideoListView != null) {
             mVideoListView.setAdapter(adapter);

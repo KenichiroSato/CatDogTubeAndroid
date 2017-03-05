@@ -44,8 +44,6 @@ public final class PlayerFragment extends YouTubePlayerFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initialize(YouTubeInfo.INFO, this);
-        setVideoId("Ndbe8XbpYVc");
     }
 
     @Override
@@ -94,17 +92,20 @@ public final class PlayerFragment extends YouTubePlayerFragment
     //MARK: PlayerContract.View
     @Override
     public boolean loadPlayerView(@NotNull String videoId) {
-        return false;
+        initialize(YouTubeInfo.INFO, this);
+        mVideoId = videoId;
+        return true;
     }
 
     @Override
     public void loadVideo(@NotNull String videoId) {
-
+        mPlayer.loadVideo(videoId);
+        mVideoId = videoId;
     }
 
     @Override
     public void play() {
-
+        mPlayer.play();
     }
 
     @Override
