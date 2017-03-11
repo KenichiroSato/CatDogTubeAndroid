@@ -99,6 +99,10 @@ public final class PlayerFragment extends YouTubePlayerFragment
 
     @Override
     public void loadVideo(@NotNull String videoId) {
+        if (mPlayer == null) {
+            loadPlayerView(videoId);
+            return;
+        }
         mPlayer.loadVideo(videoId);
         mVideoId = videoId;
     }
