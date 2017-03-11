@@ -2,7 +2,6 @@ package com.capken.catdogtube.function.video.presentation.collection;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 
 import com.capken.catdogtube.R;
 import com.capken.catdogtubedomain.video.domain.model.Video;
+import com.capken.catdogtubedomain.video.presentation.collection.VideoCollectionContract;
 
 import java.util.List;
 
@@ -23,16 +23,18 @@ final class VideoCollectionAdapter extends ArrayAdapter {
 
     final private Context mContext;
     final private List<Video> mVideos;
+    final private VideoCollectionContract.Presenter mPresenter;
 
-    public VideoCollectionAdapter(Context context, List<Video> videos) {
+    public VideoCollectionAdapter(Context context, List<Video> videos, VideoCollectionContract.Presenter presenter) {
         super(context, 0);
         mContext = context;
         mVideos = videos;
+        mPresenter = presenter;
     }
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.video_list_item, parent, false);
@@ -44,6 +46,12 @@ final class VideoCollectionAdapter extends ArrayAdapter {
         if (position < mVideos.size()) {
             itemName.setText(mVideos.get(position).getTitle());
         }
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.onVideoTapped(mVideos.get(position));
+            }
+        });
 
         return convertView;
     }
