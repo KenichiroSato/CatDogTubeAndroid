@@ -1,8 +1,12 @@
 package com.capken.catdogtube;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
 import com.capken.catdogtube.common.ThreadExecutor;
 import com.capken.catdogtube.function.player.PlayerFragment;
@@ -20,6 +24,7 @@ import com.capken.catdogtubedomain.video.presentation.collection.LoadVideoPresen
 import com.capken.catdogtubedomain.video.presentation.collection.VideoCollectionContract;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentedContract;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentsPresenter;
+import com.google.android.youtube.player.YouTubePlayer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +34,7 @@ import java.util.Map;
  */
 
 public final class MainActivity extends AppCompatActivity implements
+        YouTubePlayer.OnFullscreenListener,
         SegmentedFragment.PresenterOwner,
         PlayerFragment.PresenterOwner,
         VideoCollectionFragment.PresenterOwner {
@@ -36,12 +42,18 @@ public final class MainActivity extends AppCompatActivity implements
     private PlayerContract.Presenter mPlayerPresenter;
     private SegmentedContract.Presenter mSegmentsPresenter;
     private Map<Integer, VideoCollectionContract.Presenter> mVideoCollectionPresenters = new HashMap<>();
+    private PlayerFragment mPlayerFragment;
+    private SegmentedFragment mSegmentedFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         getSupportActionBar().hide();
+
+        mPlayerFragment = (PlayerFragment) getFragmentManager().findFragmentById(R.id.player_fragment);
+        mSegmentedFragment = (SegmentedFragment) getSupportFragmentManager().findFragmentById(R.id.container_segmented);
     }
 
     @Override
@@ -75,4 +87,38 @@ public final class MainActivity extends AppCompatActivity implements
             mVideoCollectionPresenters.put(index, presenter);
         }
     }
+
+    @Override
+    public void onFullscreen(boolean b) {
+        updateLayout(b);
+    }
+
+    private void updateLayout(boolean isFullScreen) {
+        LayoutParams playerParams =
+                (LayoutParams) mPlayerFragment.getView().getLayoutParams();
+
+        if (isFullScreen) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            mSegmentedFragment.getView().setVisibility(View.GONE);
+            playerParams.height = LayoutParams.MATCH_PARENT;
+
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            mSegmentedFragment.getView().setVisibility(View.VISIBLE);
+            playerParams.height = LayoutParams.WRAP_CONTENT;
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        updateLayout(isLandscape());
+    }
+
+    private boolean isLandscape() {
+        return getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE;
+
+    }
+
 }

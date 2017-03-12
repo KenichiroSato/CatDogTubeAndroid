@@ -2,6 +2,7 @@ package com.capken.catdogtube.function.video.presentation.collection;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,9 +61,15 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mPresenter.loadVideo(true);
+    }
+
+
+    @Override
     public void onResume() {
         super.onResume();
-        mPresenter.loadVideo(true);
     }
 
     //MARK VideoCollectionContract.View
