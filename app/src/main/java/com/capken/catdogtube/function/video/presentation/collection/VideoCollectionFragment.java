@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -102,17 +104,23 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
         Toast.makeText(getContext(), R.string.MSG_FAILED_TO_LOAD, Toast.LENGTH_SHORT).show();
         mVideoListView.setVisibility(View.GONE);
         mLoadingIcon.setVisibility(View.VISIBLE);
+        mLoadingIcon.getAnimation().cancel();
+        mLoadingIcon.clearAnimation();
     }
 
     @Override
     public void hideErrorUI() {
         mVideoListView.setVisibility(View.VISIBLE);
+        mLoadingIcon.getAnimation().cancel();
+        mLoadingIcon.clearAnimation();
         mLoadingIcon.setVisibility(View.GONE);
     }
 
     @Override
     public void showLoadingIndicator() {
         mVideoListView.setVisibility(View.GONE);
+        final Animation animRefresh = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_loading);
+        mLoadingIcon.startAnimation(animRefresh);
         mLoadingIcon.setVisibility(View.VISIBLE);
     }
 }
