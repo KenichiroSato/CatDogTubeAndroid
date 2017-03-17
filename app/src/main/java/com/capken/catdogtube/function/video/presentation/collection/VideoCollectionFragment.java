@@ -7,7 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.capken.catdogtube.R;
 import com.capken.catdogtube.function.video.presentation.segmented.SegmentFactory;
@@ -30,6 +32,7 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
     }
 
     private ListView mVideoListView;
+    private ImageView mLoadingIcon;
 
     private VideoCollectionContract.Presenter mPresenter;
 
@@ -56,6 +59,13 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_video_collection, container, false);
         mVideoListView = (ListView) view.findViewById(R.id.list_view);
+        mLoadingIcon = (ImageView) view.findViewById(R.id.loading_icon);
+        mLoadingIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.loadVideo(true);
+            }
+        });
 
         return view;
     }
@@ -89,16 +99,20 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
 
     @Override
     public void showErrorUI() {
-
+        Toast.makeText(getContext(), R.string.MSG_FAILED_TO_LOAD, Toast.LENGTH_SHORT).show();
+        mVideoListView.setVisibility(View.GONE);
+        mLoadingIcon.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideErrorUI() {
-
+        mVideoListView.setVisibility(View.VISIBLE);
+        mLoadingIcon.setVisibility(View.GONE);
     }
 
     @Override
     public void showLoadingIndicator() {
-
+        mVideoListView.setVisibility(View.GONE);
+        mLoadingIcon.setVisibility(View.VISIBLE);
     }
 }

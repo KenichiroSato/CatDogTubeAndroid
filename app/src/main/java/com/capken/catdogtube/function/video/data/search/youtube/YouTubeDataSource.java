@@ -73,7 +73,7 @@ public final class YouTubeDataSource implements SearchVideoDataSourceProtocol {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d("tag", e.getMessage());
-                // リクエスト失敗時の処理
+                completionHandler.invoke(null);
             }
 
             @Override
@@ -86,7 +86,7 @@ public final class YouTubeDataSource implements SearchVideoDataSourceProtocol {
                     completionHandler.invoke(videos);
                 } else {
                     Log.d("tag", "res=" + response.toString());
-                    // レスポンスが200(OK)以外だった時の処理
+                    completionHandler.invoke(null);
                 }
             }
         });
