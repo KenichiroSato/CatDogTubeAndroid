@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
 
     private ListView mVideoListView;
     private ImageView mLoadingIcon;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private VideoCollectionContract.Presenter mPresenter;
 
@@ -68,6 +70,8 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
                 mPresenter.loadVideo(true);
             }
         });
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.pull_to_refresh);
+        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
 
         return view;
     }
@@ -104,16 +108,16 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
         Toast.makeText(getContext(), R.string.MSG_FAILED_TO_LOAD, Toast.LENGTH_SHORT).show();
         mVideoListView.setVisibility(View.GONE);
         mLoadingIcon.setVisibility(View.VISIBLE);
-        mLoadingIcon.getAnimation().cancel();
         mLoadingIcon.clearAnimation();
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void hideErrorUI() {
         mVideoListView.setVisibility(View.VISIBLE);
-        mLoadingIcon.getAnimation().cancel();
         mLoadingIcon.clearAnimation();
         mLoadingIcon.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -122,5 +126,13 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
         final Animation animRefresh = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_loading);
         mLoadingIcon.startAnimation(animRefresh);
         mLoadingIcon.setVisibility(View.VISIBLE);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
+
+    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            mPresenter.loadVideo(false);
+        }
+    };
 }
