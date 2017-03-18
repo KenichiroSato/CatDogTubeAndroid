@@ -1,16 +1,23 @@
 package com.capken.catdogtube.function.video.presentation.segmented;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.capken.catdogtube.R;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentProtocol;
@@ -63,20 +70,35 @@ public final class SegmentedFragment extends Fragment implements SegmentedContra
         mPresenter.loadSegments();
     }
 
-    private void setupTabs() {
+    private void setupTabs(@NotNull List<? extends SegmentProtocol> segments) {
         View rootView = getView();
-        if (rootView != null) {
-            TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
-            ViewPager pager = (ViewPager) rootView.findViewById(R.id.pager);
-            // 1 dp
-            final float scale = getResources().getDisplayMetrics().density;
-            pager.setPageMargin((int) (scale * 1));
-            FragmentPagerAdapter adapter = new SegmentedPagerAdapter(getChildFragmentManager());
-            pager.setAdapter(adapter);
-            tabLayout.setupWithViewPager(pager);
+        if (rootView == null) {
+            return;
         }
+        TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
+        ViewPager pager = (ViewPager) rootView.findViewById(R.id.pager);
+        // 1 dp
+        final float scale = getResources().getDisplayMetrics().density;
+        pager.setPageMargin((int) (scale * 1));
+        FragmentPagerAdapter adapter = new SegmentedPagerAdapter(getChildFragmentManager());
+        pager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(pager);
 
+
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        int index = 0;
+        for (final SegmentProtocol segment : segments) {
+            TabLayout.Tab tab = tabLayout.getTabAt(index);
+            tab.setText("");
+
+            View tabView = inflater.inflate(R.layout.tab, null);
+            tab.setCustomView(tabView);
+            ImageView image = (ImageView) tabView.findViewById(R.id.tab_icon);
+            image.setImageDrawable(ContextCompat.getDrawable(getContext(), segment.iconResourceId()));
+            index++;
+        }
     }
+
 
     //MARK: SegmentedContract.View
     @Override
@@ -90,8 +112,7 @@ public final class SegmentedFragment extends Fragment implements SegmentedContra
         for (final SegmentProtocol segment : segments) {
             mTabFragments.add((Fragment) segment.view());
         }
-        setupTabs();
-
+        setupTabs(segments);
     }
 
     @Override
@@ -116,8 +137,7 @@ public final class SegmentedFragment extends Fragment implements SegmentedContra
         }
 
         @Override
-        public CharSequence getPageTitle(int position) {
-            return "title";
-        }
+        public CharSequence getPageTitle(int position) { return ""; }
+
     }
 }

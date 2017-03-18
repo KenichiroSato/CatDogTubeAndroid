@@ -5,7 +5,6 @@ import android.os.Bundle;
 import com.capken.catdogtube.function.video.presentation.collection.VideoCollectionFragment;
 import com.capken.catdogtubedomain.player.PlayerContract;
 import com.capken.catdogtubedomain.video.domain.model.ContentType;
-import com.capken.catdogtubedomain.video.presentation.segmented.SearchSegment;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentFactoryProtocol;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentProtocol;
 

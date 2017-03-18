@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.capken.catdogtube.R;
 import com.capken.catdogtubedomain.video.domain.model.Video;
 import com.capken.catdogtubedomain.video.presentation.collection.VideoCollectionContract;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -44,7 +45,9 @@ final class VideoCollectionAdapter extends ArrayAdapter {
         ImageView itemIcon = (ImageView) convertView.findViewById(R.id.image_view);
 
         if (position < mVideos.size()) {
-            itemName.setText(mVideos.get(position).getTitle());
+            Video video = mVideos.get(position);
+            itemName.setText(video.getTitle());
+            Picasso.with(mContext).load(video.getImageUrl()).into(itemIcon);
         }
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

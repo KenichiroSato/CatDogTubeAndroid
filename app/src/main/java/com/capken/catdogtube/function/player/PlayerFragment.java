@@ -3,6 +3,7 @@ package com.capken.catdogtube.function.player;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.capken.catdogtube.MainActivity;
 import com.capken.catdogtube.function.video.data.search.youtube.YouTubeInfo;
 import com.capken.catdogtubedomain.player.PlayerContract;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -75,7 +76,7 @@ public final class PlayerFragment extends YouTubePlayerFragment
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean restored) {
         this.mPlayer = youTubePlayer;
         mPlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
-        //mPlayer.setOnFullscreenListener(activity as VideoListDemoActivity)
+        mPlayer.setOnFullscreenListener((MainActivity )getActivity());
         if (!restored && mVideoId != null) {
             //mPlayer.cueVideo(mVideoId);
             mPlayer.loadVideo(mVideoId);
@@ -99,6 +100,10 @@ public final class PlayerFragment extends YouTubePlayerFragment
 
     @Override
     public void loadVideo(@NotNull String videoId) {
+        if (mPlayer == null) {
+            loadPlayerView(videoId);
+            return;
+        }
         mPlayer.loadVideo(videoId);
         mVideoId = videoId;
     }

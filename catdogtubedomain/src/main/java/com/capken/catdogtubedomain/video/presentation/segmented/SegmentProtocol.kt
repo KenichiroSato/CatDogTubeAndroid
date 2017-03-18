@@ -6,7 +6,7 @@ package com.capken.catdogtubedomain.video.presentation.segmented
 
 interface SegmentProtocol {
 
-    fun iconName(): String
+    fun iconResourceId(): Int
 
     fun view(): SegmentContract.View
 
