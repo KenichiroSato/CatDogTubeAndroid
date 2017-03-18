@@ -25,7 +25,7 @@ class SearchSegment implements SegmentProtocol {
     public int iconResourceId() {
         switch (mType) {
             case dog:
-                return R.drawable.cat;
+                return R.drawable.dog;
             case cat:
                 return R.drawable.cat;
             default:
