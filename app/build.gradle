@@ -41,6 +41,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'info.vividcode:date-format-iso8601:1.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.google.firebase:firebase-core:10.0.1'
 
 
 }
@@ -48,3 +49,5 @@ repositories {
     mavenCentral()
     jcenter()
 }
+
+apply plugin: 'com.google.gms.google-services'
