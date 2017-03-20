@@ -7,6 +7,6 @@ import com.capken.catdogtubedomain.player.PlayerContract
  */
 
 interface SegmentFactoryProtocol {
-    fun createSegments(playerPresenter:PlayerContract.Presenter): List<SegmentProtocol>
+    fun createSegments(): List<SegmentProtocol>
 }
 

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
 import com.capken.catdogtube.common.ThreadExecutor;
@@ -60,7 +59,7 @@ public final class MainActivity extends AppCompatActivity implements
     public void bindToPresenter(SegmentedContract.View view) {
         if (mSegmentsPresenter == null) {
             mSegmentsPresenter =
-                    new SegmentsPresenter(view, mPlayerPresenter, new SegmentFactory());
+                    new SegmentsPresenter(view, new SegmentFactory());
         }
     }
 

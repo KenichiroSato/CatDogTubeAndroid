@@ -6,9 +6,8 @@ import com.capken.catdogtubedomain.player.PlayerContract
  * Created by ken on 2017/01/28..
  */
 
-class SegmentsPresenter (private var view: SegmentedContract.View,
-                         private val playerPresenter: PlayerContract.Presenter,
-                         private val segmentFactory: SegmentFactoryProtocol): SegmentedContract.Presenter {
+class SegmentsPresenter(private var view: SegmentedContract.View,
+                        private val segmentFactory: SegmentFactoryProtocol) : SegmentedContract.Presenter {
 
     init {
         view.setPresenter(this)
@@ -21,7 +20,7 @@ class SegmentsPresenter (private var view: SegmentedContract.View,
 
     //MARK: SegmentedContract_Presenter
     override fun loadSegments() {
-        segments = segmentFactory.createSegments(playerPresenter)
+        segments = segmentFactory.createSegments()
         view.show(segments)
     }
 
