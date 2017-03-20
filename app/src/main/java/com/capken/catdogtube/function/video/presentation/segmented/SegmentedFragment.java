@@ -1,7 +1,6 @@
 package com.capken.catdogtube.function.video.presentation.segmented;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -9,15 +8,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.capken.catdogtube.R;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentProtocol;
@@ -137,7 +132,9 @@ public final class SegmentedFragment extends Fragment implements SegmentedContra
         }
 
         @Override
-        public CharSequence getPageTitle(int position) { return ""; }
+        public CharSequence getPageTitle(int position) {
+            return "";
+        }
 
     }
 }
