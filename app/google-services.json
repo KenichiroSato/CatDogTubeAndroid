@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "538291592540",
+    "firebase_url": "https://catdogtube-1193.firebaseio.com",
+    "project_id": "catdogtube-1193",
+    "storage_bucket": "catdogtube-1193.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:538291592540:android:13d68e5d169396c9",
+        "android_client_info": {
+          "package_name": "com.capken.catdogtube"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "538291592540-64enerf2760n1flbaulc13c7086i2d02.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.capken.catdogtube",
+            "certificate_hash": "a79ea56aed8b23ad6ee0ec029c33e1361328fdfd"
+          }
+        },
+        {
+          "client_id": "538291592540-tf7171p45l1qduf182jirpfih4itcs4i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJ9VfIgFhT4UvB6MufRevEYIiDXgBFjZg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "538291592540-tf7171p45l1qduf182jirpfih4itcs4i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
