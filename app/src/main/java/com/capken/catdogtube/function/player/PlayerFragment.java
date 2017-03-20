@@ -9,6 +9,7 @@ import com.capken.catdogtubedomain.player.PlayerContract;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * Created by 2ndDisplay on 2017/02/17.
  */
 
-public final class PlayerFragment extends YouTubePlayerFragment
+public final class PlayerFragment extends YouTubePlayerSupportFragment
         implements YouTubePlayer.OnInitializedListener, PlayerContract.View {
 
     public interface PresenterOwner {

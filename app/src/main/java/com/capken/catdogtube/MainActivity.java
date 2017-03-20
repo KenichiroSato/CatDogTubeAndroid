@@ -51,7 +51,7 @@ public final class MainActivity extends AppCompatActivity implements
 
         getSupportActionBar().hide();
 
-        mPlayerFragment = (PlayerFragment) getFragmentManager().findFragmentById(R.id.player_fragment);
+        mPlayerFragment = (PlayerFragment) getSupportFragmentManager().findFragmentById(R.id.player_fragment);
         mSegmentedFragment = (SegmentedFragment) getSupportFragmentManager().findFragmentById(R.id.container_segmented);
     }
 
