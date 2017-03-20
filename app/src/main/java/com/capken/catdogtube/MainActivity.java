@@ -67,6 +67,9 @@ public final class MainActivity extends AppCompatActivity implements
     public void bindToPresenter(PlayerContract.View view) {
         if (mPlayerPresenter == null) {
             mPlayerPresenter = new PlayVideoPresenter(view);
+            for (VideoCollectionContract.Presenter collectionPresenter: mVideoCollectionPresenters.values()) {
+                collectionPresenter.setPlayer(mPlayerPresenter);
+            }
         }
     }
 

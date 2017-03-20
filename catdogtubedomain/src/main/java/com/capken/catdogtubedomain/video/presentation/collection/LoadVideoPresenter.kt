@@ -12,7 +12,7 @@ import com.capken.catdogtubedomain.video.domain.model.Video
 class LoadVideoPresenter(private val view: VideoCollectionContract.View,
                          private val useCase: LoadVideoUseCase,
                          private val executor: ThreadExecutorProtocol,
-                         var playerPresenter: PlayerContract.Presenter) : VideoCollectionContract.Presenter {
+                         var playerPresenter: PlayerContract.Presenter?) : VideoCollectionContract.Presenter {
 
     init {
         view.setPresenter(this)
@@ -24,7 +24,7 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
     private fun onLoadSuccess(videos: List<Video>) {
         executor.runOnMain {
             if (this.isPrimal) {
-                this.playerPresenter.onVideoLoaded(videos)
+                this.playerPresenter?.onVideoLoaded(videos)
             }
             this.view.show(videos)
             this.view.hideErrorUI()
@@ -39,6 +39,10 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
     }
 
     // MARK: VideoCollectionContract_Presenter
+    override fun setPlayer(player: PlayerContract.Presenter) {
+        playerPresenter = player
+    }
+
     override fun loadVideo(withFullScreenIndicator: Boolean) {
         if (withFullScreenIndicator) {
             view.showLoadingIndicator()
@@ -65,6 +69,6 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
     }
 
     override fun onVideoTapped(video: Video) {
-        playerPresenter.onVideoTapped(video)
+        playerPresenter?.onVideoTapped(video)
     }
 }

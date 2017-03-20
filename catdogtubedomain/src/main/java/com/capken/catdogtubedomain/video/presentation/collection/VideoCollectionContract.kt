@@ -1,5 +1,6 @@
 package com.capken.catdogtubedomain.video.presentation.collection
 
+import com.capken.catdogtubedomain.player.PlayerContract
 import com.capken.catdogtubedomain.video.domain.model.Video
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentContract
 
@@ -24,6 +25,8 @@ interface VideoCollectionContract {
     }
 
     interface Presenter: SegmentContract.Presenter {
+
+        fun setPlayer(player: PlayerContract.Presenter)
 
         fun loadVideo(withFullScreenIndicator:Boolean)
 
