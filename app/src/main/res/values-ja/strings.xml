@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CatDogTube</string>
+    <string name="BACK">戻る</string>
+    <string name="CANCEL">キャンセル</string>
+    <string name="MSG_FAILED_TO_LOAD">読み込みに失敗しました。</string>
+    <string name="OK">OK</string>
+    <string name="OPEN_YOUTUBE">YouTubeで開く</string>
+    <string name="SEARCH_WORD_CAT">子猫</string>
+    <string name="SEARCH_WORD_DOG">子犬</string>
+</resources>
