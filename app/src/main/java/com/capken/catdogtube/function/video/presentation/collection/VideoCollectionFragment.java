@@ -8,10 +8,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.capken.catdogtube.R;
@@ -35,7 +34,8 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
     }
 
     private ListView mVideoListView;
-    private ImageView mLoadingIcon;
+    private ImageView mReloadIcon;
+    private ProgressBar mProgressBar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private VideoCollectionContract.Presenter mPresenter;
@@ -63,8 +63,8 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_video_collection, container, false);
         mVideoListView = (ListView) view.findViewById(R.id.list_view);
-        mLoadingIcon = (ImageView) view.findViewById(R.id.loading_icon);
-        mLoadingIcon.setOnClickListener(new View.OnClickListener() {
+        mReloadIcon = (ImageView) view.findViewById(R.id.loading_icon);
+        mReloadIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mPresenter.loadVideo(true);
@@ -72,6 +72,7 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
         });
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.pull_to_refresh);
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
 
         return view;
     }
@@ -107,25 +108,24 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
     public void showErrorUI() {
         Toast.makeText(getContext(), R.string.MSG_FAILED_TO_LOAD, Toast.LENGTH_SHORT).show();
         mVideoListView.setVisibility(View.GONE);
-        mLoadingIcon.setVisibility(View.VISIBLE);
-        mLoadingIcon.clearAnimation();
+        mReloadIcon.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void hideErrorUI() {
         mVideoListView.setVisibility(View.VISIBLE);
-        mLoadingIcon.clearAnimation();
-        mLoadingIcon.setVisibility(View.GONE);
+        mReloadIcon.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void showLoadingIndicator() {
         mVideoListView.setVisibility(View.GONE);
-        final Animation animRefresh = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_loading);
-        mLoadingIcon.startAnimation(animRefresh);
-        mLoadingIcon.setVisibility(View.VISIBLE);
+        mReloadIcon.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setRefreshing(false);
     }
 

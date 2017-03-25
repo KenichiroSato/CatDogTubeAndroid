@@ -18,9 +18,9 @@ class PlayVideoPresenter(val view: PlayerContract.View): PlayerContract.Presente
     }
 
     override fun onVideoLoaded(videos: List<Video>) {
-        //guard let video = videos.first else { return }
         //https://medium.com/@adinugroho/unwrapping-sort-of-optional-variable-in-kotlin-9bfb640dc709#.ctjauxvx4
-        val video = videos.first()?.let { it } ?: return
+        if (videos.isEmpty()) {return}
+        val video = videos.first()
 
         if (shouldPlayVideo(hasPlayed)) {
             play(video)
