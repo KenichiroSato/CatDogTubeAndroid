@@ -25,7 +25,7 @@ public final class SegmentFactory implements SegmentFactoryProtocol {
 
     @NotNull
     @Override
-    public List<SegmentProtocol> createSegments(@NotNull PlayerContract.Presenter presenter) {
+    public List<SegmentProtocol> createSegments() {
         List<SegmentProtocol> list = new ArrayList<>();
         list.add(searchSegment(0, ContentType.cat));
         list.add(searchSegment(1, ContentType.dog));

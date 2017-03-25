@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
+import android.widget.LinearLayout.LayoutParams;
 
+import com.capken.catdogtube.common.Screen;
 import com.capken.catdogtube.common.ThreadExecutor;
 import com.capken.catdogtube.function.player.PlayerFragment;
 import com.capken.catdogtube.function.video.data.search.youtube.YouTubeDataSource;
@@ -28,6 +28,8 @@ import com.google.android.youtube.player.YouTubePlayer;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 
 /**
  * Created by 2ndDisplay on 2017/02/17.
@@ -51,8 +53,9 @@ public final class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().hide();
+        if (Screen.isTablet(this)){ setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);}
 
-        mPlayerFragment = (PlayerFragment) getFragmentManager().findFragmentById(R.id.player_fragment);
+        mPlayerFragment = (PlayerFragment) getSupportFragmentManager().findFragmentById(R.id.player_fragment);
         mSegmentedFragment = (SegmentedFragment) getSupportFragmentManager().findFragmentById(R.id.container_segmented);
     }
 
@@ -60,7 +63,7 @@ public final class MainActivity extends AppCompatActivity implements
     public void bindToPresenter(SegmentedContract.View view) {
         if (mSegmentsPresenter == null) {
             mSegmentsPresenter =
-                    new SegmentsPresenter(view, mPlayerPresenter, new SegmentFactory());
+                    new SegmentsPresenter(view, new SegmentFactory());
         }
     }
 
@@ -68,6 +71,9 @@ public final class MainActivity extends AppCompatActivity implements
     public void bindToPresenter(PlayerContract.View view) {
         if (mPlayerPresenter == null) {
             mPlayerPresenter = new PlayVideoPresenter(view);
+            for (VideoCollectionContract.Presenter collectionPresenter: mVideoCollectionPresenters.values()) {
+                collectionPresenter.setPlayer(mPlayerPresenter);
+            }
         }
     }
 
@@ -105,7 +111,7 @@ public final class MainActivity extends AppCompatActivity implements
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             mSegmentedFragment.getView().setVisibility(View.VISIBLE);
-            playerParams.height = LayoutParams.WRAP_CONTENT;
+            playerParams.height = Screen.isTablet(this) ? LayoutParams.MATCH_PARENT : LayoutParams.WRAP_CONTENT;
         }
     }
 

@@ -4,11 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.capken.catdogtube.MainActivity;
+import com.capken.catdogtube.common.Screen;
 import com.capken.catdogtube.function.video.data.search.youtube.YouTubeInfo;
 import com.capken.catdogtubedomain.player.PlayerContract;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * Created by 2ndDisplay on 2017/02/17.
  */
 
-public final class PlayerFragment extends YouTubePlayerFragment
+public final class PlayerFragment extends YouTubePlayerSupportFragment
         implements YouTubePlayer.OnInitializedListener, PlayerContract.View {
 
     public interface PresenterOwner {
@@ -76,7 +78,9 @@ public final class PlayerFragment extends YouTubePlayerFragment
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean restored) {
         this.mPlayer = youTubePlayer;
         mPlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
-        mPlayer.setOnFullscreenListener((MainActivity )getActivity());
+        //In phone case, hide fullscreen button on screen.
+        mPlayer.setShowFullscreenButton(Screen.isTablet(getContext()));
+        mPlayer.setOnFullscreenListener((MainActivity) getActivity());
         if (!restored && mVideoId != null) {
             //mPlayer.cueVideo(mVideoId);
             mPlayer.loadVideo(mVideoId);

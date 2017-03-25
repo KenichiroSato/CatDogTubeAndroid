@@ -71,6 +71,7 @@ public final class SegmentedFragment extends Fragment implements SegmentedContra
             return;
         }
         TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         ViewPager pager = (ViewPager) rootView.findViewById(R.id.pager);
         // 1 dp
         final float scale = getResources().getDisplayMetrics().density;
