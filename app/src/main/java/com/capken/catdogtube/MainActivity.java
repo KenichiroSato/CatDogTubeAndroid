@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.RelativeLayout.LayoutParams;
+import android.widget.LinearLayout.LayoutParams;
 
 import com.capken.catdogtube.common.ThreadExecutor;
 import com.capken.catdogtube.function.player.PlayerFragment;
