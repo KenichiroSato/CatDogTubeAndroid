@@ -29,6 +29,8 @@ import com.google.android.youtube.player.YouTubePlayer;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+
 /**
  * Created by 2ndDisplay on 2017/02/17.
  */
@@ -51,6 +53,7 @@ public final class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().hide();
+        if (Screen.isTablet(this)){ setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);}
 
         mPlayerFragment = (PlayerFragment) getSupportFragmentManager().findFragmentById(R.id.player_fragment);
         mSegmentedFragment = (SegmentedFragment) getSupportFragmentManager().findFragmentById(R.id.container_segmented);
