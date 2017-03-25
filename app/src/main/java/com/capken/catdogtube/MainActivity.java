@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout.LayoutParams;
 
+import com.capken.catdogtube.common.Screen;
 import com.capken.catdogtube.common.ThreadExecutor;
 import com.capken.catdogtube.function.player.PlayerFragment;
 import com.capken.catdogtube.function.video.data.search.youtube.YouTubeDataSource;
@@ -107,7 +108,7 @@ public final class MainActivity extends AppCompatActivity implements
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             mSegmentedFragment.getView().setVisibility(View.VISIBLE);
-            playerParams.height = LayoutParams.WRAP_CONTENT;
+            playerParams.height = Screen.isTablet(this) ? LayoutParams.MATCH_PARENT : LayoutParams.WRAP_CONTENT;
         }
     }
 
