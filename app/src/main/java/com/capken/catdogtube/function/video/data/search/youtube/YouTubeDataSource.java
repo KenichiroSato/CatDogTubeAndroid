@@ -107,6 +107,16 @@ public final class YouTubeDataSource implements SearchVideoDataSourceProtocol {
         List<String> params = new ArrayList<>();
         params.add(beforeStr);
         params.add(afterStr);
+
+
+        //cat
+        //params["publishedBefore"] = "2015-03-13T15:00:26Z"//2014-02-18T17:30:05Z
+        //params["publishedAfter"] =  "2015-02-11T15:00:26Z"//2014-01-19T17:30:05Z
+
+        //dog
+        //params["publishedBefore"] = "2013-08-12T18:01:59Z"//"2012-09-04T05:47:54Z"
+        //params["publishedAfter"] =  "2013-07-13T18:01:59Z"//"2012-08-05T05:47:54Z"
+
         Log.d("gap", beforeStr);
         Log.d("gap", afterStr);
 
