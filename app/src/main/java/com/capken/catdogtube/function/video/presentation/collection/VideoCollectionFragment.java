@@ -5,11 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -33,7 +34,7 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
         void bindToPresenter(VideoCollectionContract.View view, ContentType type, int index);
     }
 
-    private ListView mVideoListView;
+    private RecyclerView mVideoRecyclerView;
     private ImageView mReloadIcon;
     private ProgressBar mProgressBar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -62,7 +63,7 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_video_collection, container, false);
-        mVideoListView = (ListView) view.findViewById(R.id.list_view);
+        mVideoRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mReloadIcon = (ImageView) view.findViewById(R.id.loading_icon);
         mReloadIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,17 +98,19 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
 
     @Override
     public void show(@NotNull List<Video> videos) {
-        VideoCollectionAdapter adapter = new VideoCollectionAdapter(getActivity(), videos, mPresenter);
-
-        if (mVideoListView != null) {
-            mVideoListView.setAdapter(adapter);
+        if (mVideoRecyclerView != null) {
+            mVideoRecyclerView.setHasFixedSize(true);
+            StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, 1);
+            mVideoRecyclerView.setLayoutManager(gridLayoutManager);
+            RecyclerViewAdapter rcAdapter = new RecyclerViewAdapter(getContext(), videos, mPresenter);
+            mVideoRecyclerView.setAdapter(rcAdapter);
         }
     }
 
     @Override
     public void showErrorUI() {
         Toast.makeText(getContext(), R.string.MSG_FAILED_TO_LOAD, Toast.LENGTH_SHORT).show();
-        mVideoListView.setVisibility(View.GONE);
+        mVideoRecyclerView.setVisibility(View.GONE);
         mReloadIcon.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
@@ -115,7 +118,7 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
 
     @Override
     public void hideErrorUI() {
-        mVideoListView.setVisibility(View.VISIBLE);
+        mVideoRecyclerView.setVisibility(View.VISIBLE);
         mReloadIcon.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
@@ -123,7 +126,7 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
 
     @Override
     public void showLoadingIndicator() {
-        mVideoListView.setVisibility(View.GONE);
+        mVideoRecyclerView.setVisibility(View.GONE);
         mReloadIcon.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setRefreshing(false);
