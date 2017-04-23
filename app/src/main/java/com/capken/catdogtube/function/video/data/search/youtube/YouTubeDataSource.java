@@ -60,7 +60,7 @@ public final class YouTubeDataSource implements SearchVideoDataSourceProtocol {
                 .addQueryParameter("part", "snippet")
                 .addQueryParameter("type", "video")
                 .addQueryParameter("videoDuration", "short")
-                .addQueryParameter("maxResults", "30")
+                .addQueryParameter("maxResults", "50")
                 .addQueryParameter("order", "viewCount")
                 .addQueryParameter("publishedBefore", publishedParam.before)
                 .addQueryParameter("publishedAfter", publishedParam.after)
