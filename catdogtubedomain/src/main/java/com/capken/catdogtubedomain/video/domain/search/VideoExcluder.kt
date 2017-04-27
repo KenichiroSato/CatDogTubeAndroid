@@ -63,8 +63,11 @@ class VideoExcluder {
                 "MAD",
                 "やさぐれ",
                 "ミスキャンパス",
-                "踏み潰す"
-
+                "踏み潰す",
+                "日本橋",
+                "りゅりゅ",
+                "うんこ",
+                "リンゴの森"
         )
 
         fun excludeInappropriateVideos(videos: List<Video>?): List<Video>? {

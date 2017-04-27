@@ -29,7 +29,7 @@ final class YouTubeDataParser {
             JsonObject snippet = jsonItem.getAsJsonObject("snippet");
             String title = snippet.get("title").getAsString();
             String url = snippet.getAsJsonObject("thumbnails")
-                    .getAsJsonObject("high")
+                    .getAsJsonObject("medium")
                     .get("url").getAsString();
 
             list.add(new YouTubeVideo(videoId, title, url));

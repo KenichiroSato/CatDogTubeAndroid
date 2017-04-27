@@ -18,7 +18,7 @@
     <fragment
         class="com.capken.catdogtube.function.video.presentation.segmented.SegmentedFragment"
         android:id="@+id/container_segmented"
-        android:layout_width="370dp"
+        android:layout_width="400dp"
         android:layout_height="match_parent" />
 
 </LinearLayout>
