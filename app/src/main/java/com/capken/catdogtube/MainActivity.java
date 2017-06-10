@@ -43,7 +43,8 @@ public final class MainActivity extends AppCompatActivity implements
 
     private PlayerContract.Presenter mPlayerPresenter;
     private SegmentedContract.Presenter mSegmentsPresenter;
-    private Map<Integer, VideoCollectionContract.Presenter> mVideoCollectionPresenters = new HashMap<>();
+    private Map<Integer, VideoCollectionContract.Presenter> mVideoCollectionPresenters
+            = new HashMap<>();
     private PlayerFragment mPlayerFragment;
     private SegmentedFragment mSegmentedFragment;
 
@@ -55,8 +56,10 @@ public final class MainActivity extends AppCompatActivity implements
         getSupportActionBar().hide();
         if (Screen.isTablet(this)){ setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);}
 
-        mPlayerFragment = (PlayerFragment) getSupportFragmentManager().findFragmentById(R.id.player_fragment);
-        mSegmentedFragment = (SegmentedFragment) getSupportFragmentManager().findFragmentById(R.id.container_segmented);
+        mPlayerFragment = (PlayerFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.player_fragment);
+        mSegmentedFragment = (SegmentedFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.container_segmented);
     }
 
     @Override
@@ -71,19 +74,19 @@ public final class MainActivity extends AppCompatActivity implements
     public void bindToPresenter(PlayerContract.View view) {
         if (mPlayerPresenter == null) {
             mPlayerPresenter = new PlayVideoPresenter(view);
-            for (VideoCollectionContract.Presenter collectionPresenter: mVideoCollectionPresenters.values()) {
-                collectionPresenter.setPlayer(mPlayerPresenter);
+            for (VideoCollectionContract.Presenter presenter: mVideoCollectionPresenters.values()) {
+                presenter.setPlayer(mPlayerPresenter);
             }
         }
     }
 
     @Override
-    public void bindToPresenter(VideoCollectionContract.View view, ContentType contentType, int index) {
+    public void bindToPresenter(VideoCollectionContract.View view, ContentType type, int index) {
         VideoCollectionContract.Presenter presenter = mVideoCollectionPresenters.get(index);
         if (presenter == null) {
             SearchVideoRepository repo = new SearchVideoRepository(new YouTubeDataSource());
             SearchWordProvider provider = new SearchWordProvider(this);
-            SearchVideoUseCase useCase = new SearchVideoUseCase(repo, contentType, provider);
+            SearchVideoUseCase useCase = new SearchVideoUseCase(repo, type, provider);
 
             presenter =
                     new LoadVideoPresenter(view, useCase, new ThreadExecutor(), mPlayerPresenter);
@@ -111,20 +114,15 @@ public final class MainActivity extends AppCompatActivity implements
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             mSegmentedFragment.getView().setVisibility(View.VISIBLE);
-            playerParams.height = Screen.isTablet(this) ? LayoutParams.MATCH_PARENT : LayoutParams.WRAP_CONTENT;
+            playerParams.height = Screen.isTablet(this) ?
+                    LayoutParams.MATCH_PARENT : LayoutParams.WRAP_CONTENT;
         }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        updateLayout(isLandscape());
-    }
-
-    private boolean isLandscape() {
-        return getResources().getConfiguration().orientation ==
-                Configuration.ORIENTATION_LANDSCAPE;
-
+        updateLayout(Screen.isLandscape(this));
     }
 
 }
