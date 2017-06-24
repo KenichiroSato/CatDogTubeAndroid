@@ -38,7 +38,6 @@ import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 public final class MainActivity extends AppCompatActivity implements
         YouTubePlayer.OnFullscreenListener,
         SegmentedFragment.PresenterOwner,
-        PlayerFragment.PresenterOwner,
         VideoCollectionFragment.PresenterOwner {
 
     private PlayerContract.Presenter mPlayerPresenter;
@@ -56,10 +55,18 @@ public final class MainActivity extends AppCompatActivity implements
         getSupportActionBar().hide();
         if (Screen.isTablet(this)){ setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);}
 
-        mPlayerFragment = (PlayerFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.player_fragment);
+        setupPlayer();
         mSegmentedFragment = (SegmentedFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.container_segmented);
+    }
+
+    private void setupPlayer() {
+        mPlayerFragment = (PlayerFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.player_fragment);
+        mPlayerPresenter = new PlayVideoPresenter(mPlayerFragment);
+        for (VideoCollectionContract.Presenter presenter: mVideoCollectionPresenters.values()) {
+            presenter.setPlayer(mPlayerPresenter);
+        }
     }
 
     @Override
@@ -67,16 +74,6 @@ public final class MainActivity extends AppCompatActivity implements
         if (mSegmentsPresenter == null) {
             mSegmentsPresenter =
                     new SegmentsPresenter(view, new SegmentFactory());
-        }
-    }
-
-    @Override
-    public void bindToPresenter(PlayerContract.View view) {
-        if (mPlayerPresenter == null) {
-            mPlayerPresenter = new PlayVideoPresenter(view);
-            for (VideoCollectionContract.Presenter presenter: mVideoCollectionPresenters.values()) {
-                presenter.setPlayer(mPlayerPresenter);
-            }
         }
     }
 

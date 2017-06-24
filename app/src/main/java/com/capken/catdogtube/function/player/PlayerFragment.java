@@ -21,22 +21,9 @@ import org.jetbrains.annotations.NotNull;
 public final class PlayerFragment extends YouTubePlayerSupportFragment
         implements YouTubePlayer.OnInitializedListener, PlayerContract.View {
 
-    public interface PresenterOwner {
-        void bindToPresenter(PlayerContract.View view);
-    }
-
     private YouTubePlayer mPlayer;
     private String mVideoId = "";
     private PlayerContract.Presenter mPresenter;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof PlayerFragment.PresenterOwner) {
-            PlayerFragment.PresenterOwner owner = (PlayerFragment.PresenterOwner) context;
-            owner.bindToPresenter(this);
-        }
-    }
 
     @Override
     public void onDetach() {
