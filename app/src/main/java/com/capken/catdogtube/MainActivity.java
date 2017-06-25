@@ -8,19 +8,11 @@ import android.view.WindowManager;
 import android.widget.LinearLayout.LayoutParams;
 
 import com.capken.catdogtube.common.Screen;
-import com.capken.catdogtube.common.ThreadExecutor;
 import com.capken.catdogtube.function.player.PlayerFragment;
-import com.capken.catdogtube.function.video.data.search.youtube.YouTubeDataSource;
-import com.capken.catdogtube.function.video.domain.search.SearchWordProvider;
-import com.capken.catdogtube.function.video.presentation.collection.VideoCollectionFragment;
 import com.capken.catdogtube.function.video.presentation.segmented.SegmentFactory;
 import com.capken.catdogtube.function.video.presentation.segmented.SegmentedFragment;
 import com.capken.catdogtubedomain.player.PlayVideoPresenter;
 import com.capken.catdogtubedomain.player.PlayerContract;
-import com.capken.catdogtubedomain.video.domain.model.ContentType;
-import com.capken.catdogtubedomain.video.domain.search.SearchVideoRepository;
-import com.capken.catdogtubedomain.video.domain.search.SearchVideoUseCase;
-import com.capken.catdogtubedomain.video.presentation.collection.LoadVideoPresenter;
 import com.capken.catdogtubedomain.video.presentation.collection.VideoCollectionContract;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentedContract;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentsPresenter;
@@ -36,9 +28,7 @@ import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
  */
 
 public final class MainActivity extends AppCompatActivity implements
-        YouTubePlayer.OnFullscreenListener,
-        SegmentedFragment.PresenterOwner,
-        VideoCollectionFragment.PresenterOwner {
+        YouTubePlayer.OnFullscreenListener {
 
     private PlayerContract.Presenter mPlayerPresenter;
     private SegmentedContract.Presenter mSegmentsPresenter;
@@ -56,8 +46,7 @@ public final class MainActivity extends AppCompatActivity implements
         if (Screen.isTablet(this)){ setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);}
 
         setupPlayer();
-        mSegmentedFragment = (SegmentedFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.container_segmented);
+        setupSearchSegments();
     }
 
     private void setupPlayer() {
@@ -69,29 +58,11 @@ public final class MainActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
-    public void bindToPresenter(SegmentedContract.View view) {
-        if (mSegmentsPresenter == null) {
-            mSegmentsPresenter =
-                    new SegmentsPresenter(view, new SegmentFactory());
-        }
-    }
-
-    @Override
-    public void bindToPresenter(VideoCollectionContract.View view, ContentType type, int index) {
-        VideoCollectionContract.Presenter presenter = mVideoCollectionPresenters.get(index);
-        if (presenter == null) {
-            SearchVideoRepository repo = new SearchVideoRepository(new YouTubeDataSource());
-            SearchWordProvider provider = new SearchWordProvider(this);
-            SearchVideoUseCase useCase = new SearchVideoUseCase(repo, type, provider);
-
-            presenter =
-                    new LoadVideoPresenter(view, useCase, new ThreadExecutor(), mPlayerPresenter);
-            if (index == 0) {
-                presenter.markAsPrimal();
-            }
-            mVideoCollectionPresenters.put(index, presenter);
-        }
+    private void setupSearchSegments() {
+        mSegmentedFragment = (SegmentedFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.container_segmented);
+        mSegmentsPresenter =
+                new SegmentsPresenter(mSegmentedFragment, mPlayerPresenter, new SegmentFactory());
     }
 
     @Override

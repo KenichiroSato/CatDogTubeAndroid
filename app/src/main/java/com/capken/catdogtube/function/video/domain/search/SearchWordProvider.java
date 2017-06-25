@@ -34,6 +34,6 @@ public final class SearchWordProvider implements SearchWordProviderProtocol {
             default:
                 id = R.string.SEARCH_WORD_CAT;
         }
-        return mContext.getResources().getString(id);
+        return "子猫";//mContext.getResources().getString(id);
     }
 }

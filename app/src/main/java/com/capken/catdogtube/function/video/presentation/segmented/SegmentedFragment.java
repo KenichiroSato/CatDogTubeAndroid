@@ -29,10 +29,6 @@ import java.util.List;
 
 public final class SegmentedFragment extends Fragment implements SegmentedContract.View {
 
-    public interface PresenterOwner {
-        void bindToPresenter(SegmentedContract.View view);
-    }
-
     private List<Fragment> mTabFragments = new ArrayList<>();
 
     private SegmentedContract.Presenter mPresenter;
@@ -41,15 +37,6 @@ public final class SegmentedFragment extends Fragment implements SegmentedContra
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_segmented, container, false);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof PresenterOwner) {
-            PresenterOwner owner = (PresenterOwner) context;
-            owner.bindToPresenter(this);
-        }
     }
 
     @Override
