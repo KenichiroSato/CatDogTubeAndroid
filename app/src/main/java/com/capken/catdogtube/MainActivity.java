@@ -13,13 +13,9 @@ import com.capken.catdogtube.function.video.presentation.segmented.SegmentFactor
 import com.capken.catdogtube.function.video.presentation.segmented.SegmentedFragment;
 import com.capken.catdogtubedomain.player.PlayVideoPresenter;
 import com.capken.catdogtubedomain.player.PlayerContract;
-import com.capken.catdogtubedomain.video.presentation.collection.VideoCollectionContract;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentedContract;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentsPresenter;
 import com.google.android.youtube.player.YouTubePlayer;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 
@@ -32,8 +28,6 @@ public final class MainActivity extends AppCompatActivity implements
 
     private PlayerContract.Presenter mPlayerPresenter;
     private SegmentedContract.Presenter mSegmentsPresenter;
-    private Map<Integer, VideoCollectionContract.Presenter> mVideoCollectionPresenters
-            = new HashMap<>();
     private PlayerFragment mPlayerFragment;
     private SegmentedFragment mSegmentedFragment;
 
@@ -53,9 +47,6 @@ public final class MainActivity extends AppCompatActivity implements
         mPlayerFragment = (PlayerFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.player_fragment);
         mPlayerPresenter = new PlayVideoPresenter(mPlayerFragment);
-        for (VideoCollectionContract.Presenter presenter: mVideoCollectionPresenters.values()) {
-            presenter.setPlayer(mPlayerPresenter);
-        }
     }
 
     private void setupSearchSegments() {
