@@ -17,6 +17,8 @@ import com.capken.catdogtubedomain.video.presentation.segmented.SegmentedContrac
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentsPresenter;
 import com.google.android.youtube.player.YouTubePlayer;
 
+import javax.inject.Inject;
+
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 
 /**
@@ -30,6 +32,8 @@ public final class MainActivity extends AppCompatActivity implements
     private SegmentedContract.Presenter mSegmentsPresenter;
     private PlayerFragment mPlayerFragment;
     private SegmentedFragment mSegmentedFragment;
+    @Inject
+    SegmentFactory mSegmentFactory;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,10 +41,20 @@ public final class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().hide();
-        if (Screen.isTablet(this)){ setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);}
+        if (Screen.isTablet(this)) {
+            setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
+        }
 
+        injectDependency();
         setupPlayer();
         setupSearchSegments();
+    }
+
+    private void injectDependency() {
+        DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(getApplication().getApplicationContext()))
+                .build()
+                .inject(this);
     }
 
     private void setupPlayer() {
@@ -53,7 +67,7 @@ public final class MainActivity extends AppCompatActivity implements
         mSegmentedFragment = (SegmentedFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.container_segmented);
         mSegmentsPresenter =
-                new SegmentsPresenter(mSegmentedFragment, mPlayerPresenter, new SegmentFactory());
+                new SegmentsPresenter(mSegmentedFragment, mPlayerPresenter, mSegmentFactory);
     }
 
     @Override

@@ -18,11 +18,20 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * Created by 2ndDisplay on 2017/02/17.
  */
 
 public final class SegmentFactory implements SegmentFactoryProtocol {
+
+    private final SearchWordProvider mWordProvider;
+
+    @Inject
+    public SegmentFactory(SearchWordProvider provider) {
+        mWordProvider = provider;
+    }
 
     @NotNull
     @Override
@@ -31,7 +40,6 @@ public final class SegmentFactory implements SegmentFactoryProtocol {
         list.add(searchSegment(0, ContentType.cat, playerPresenter));
         list.add(searchSegment(1, ContentType.dog, playerPresenter));
         return list;
-
     }
 
     private SearchSegment searchSegment(int index,
@@ -41,8 +49,7 @@ public final class SegmentFactory implements SegmentFactoryProtocol {
         VideoCollectionFragment fragment = new VideoCollectionFragment();
 
         SearchVideoRepository repo = new SearchVideoRepository(new YouTubeDataSource());
-        SearchWordProvider provider = new SearchWordProvider(fragment.getContext());
-        SearchVideoUseCase useCase = new SearchVideoUseCase(repo, contentType, provider);
+        SearchVideoUseCase useCase = new SearchVideoUseCase(repo, contentType, mWordProvider);
 
         VideoCollectionContract.Presenter presenter =
                 new LoadVideoPresenter(fragment, useCase, new ThreadExecutor(), playerPresenter);

@@ -8,14 +8,17 @@ import com.capken.catdogtubedomain.video.domain.search.SearchWordProviderProtoco
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
+
 /**
  * Created by 2ndDisplay on 2017/02/17.
  */
 
 public final class SearchWordProvider implements SearchWordProviderProtocol {
 
-    private Context mContext;
+    private final Context mContext;
 
+    @Inject
     public SearchWordProvider(Context context) {
         mContext = context;
     }
@@ -34,6 +37,6 @@ public final class SearchWordProvider implements SearchWordProviderProtocol {
             default:
                 id = R.string.SEARCH_WORD_CAT;
         }
-        return "子猫";//mContext.getResources().getString(id);
+        return mContext.getResources().getString(id);
     }
 }
