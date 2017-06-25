@@ -9,6 +9,7 @@ import android.widget.LinearLayout.LayoutParams;
 
 import com.capken.catdogtube.common.Screen;
 import com.capken.catdogtube.function.player.PlayerFragment;
+import com.capken.catdogtube.function.player.PlayerPresenterModule;
 import com.capken.catdogtube.function.video.presentation.segmented.SegmentFactory;
 import com.capken.catdogtube.function.video.presentation.segmented.SegmentedFragment;
 import com.capken.catdogtubedomain.player.PlayVideoPresenter;
@@ -28,7 +29,9 @@ import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 public final class MainActivity extends AppCompatActivity implements
         YouTubePlayer.OnFullscreenListener {
 
-    private PlayerContract.Presenter mPlayerPresenter;
+    @Inject
+    PlayerContract.Presenter mPlayerPresenter;
+
     private SegmentedContract.Presenter mSegmentsPresenter;
     private PlayerFragment mPlayerFragment;
     private SegmentedFragment mSegmentedFragment;
@@ -45,22 +48,20 @@ public final class MainActivity extends AppCompatActivity implements
             setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
         }
 
+
+        mPlayerFragment = (PlayerFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.player_fragment);
+
         injectDependency();
-        setupPlayer();
         setupSearchSegments();
     }
 
     private void injectDependency() {
         DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(getApplication().getApplicationContext()))
+                .playerPresenterModule(new PlayerPresenterModule(mPlayerFragment))
                 .build()
                 .inject(this);
-    }
-
-    private void setupPlayer() {
-        mPlayerFragment = (PlayerFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.player_fragment);
-        mPlayerPresenter = new PlayVideoPresenter(mPlayerFragment);
     }
 
     private void setupSearchSegments() {
