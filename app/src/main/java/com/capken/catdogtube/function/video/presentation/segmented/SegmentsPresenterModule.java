@@ -7,8 +7,6 @@ import com.capken.catdogtubedomain.player.PlayerContract;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentedContract;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentsPresenter;
 
-import javax.inject.Inject;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -21,11 +19,6 @@ public class SegmentsPresenterModule {
 
     private final SegmentedContract.View mView;
 
-    @Inject Context mContext;
-
-    @Inject
-    PlayerContract.Presenter mPlayerPresenter;
-
     public SegmentsPresenterModule(SegmentedContract.View view) {
         mView = view;
     }
@@ -36,9 +29,10 @@ public class SegmentsPresenterModule {
     }
 
     @Provides
-    SegmentedContract.Presenter provideSegmentsPresenter() {
-        SegmentFactory factory = new SegmentFactory(new SearchWordProvider(mContext));
-        return new SegmentsPresenter(mView, mPlayerPresenter, factory);
+    SegmentedContract.Presenter provideSegmentsPresenter(Context context,
+                                                         PlayerContract.Presenter player) {
+        SegmentFactory factory = new SegmentFactory(new SearchWordProvider(context));
+        return new SegmentsPresenter(mView, player, factory);
     }
 
 }

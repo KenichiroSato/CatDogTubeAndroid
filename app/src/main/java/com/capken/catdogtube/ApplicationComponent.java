@@ -13,8 +13,7 @@ import dagger.Component;
         PlayerPresenterModule.class,
         SegmentsPresenterModule.class})
 public interface ApplicationComponent {
-    void inject(MainActivity activity);
 
-    void inject(SegmentsPresenterModule presenterModule);
+    void inject(MainActivity activity);
 
 }

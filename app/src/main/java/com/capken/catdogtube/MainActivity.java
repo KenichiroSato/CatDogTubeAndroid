@@ -55,13 +55,11 @@ public final class MainActivity extends AppCompatActivity implements
     }
 
     private void injectDependency() {
-        SegmentsPresenterModule module = new SegmentsPresenterModule(mSegmentedFragment);
         ApplicationComponent comp = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(getApplication().getApplicationContext()))
                 .playerPresenterModule(new PlayerPresenterModule(mPlayerFragment))
-                .segmentsPresenterModule(module)
+                .segmentsPresenterModule(new SegmentsPresenterModule(mSegmentedFragment))
                 .build();
-        comp.inject(module);
         comp.inject(this);
     }
 
