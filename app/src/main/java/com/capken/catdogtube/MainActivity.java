@@ -8,26 +8,15 @@ import android.view.WindowManager;
 import android.widget.LinearLayout.LayoutParams;
 
 import com.capken.catdogtube.common.Screen;
-import com.capken.catdogtube.common.ThreadExecutor;
 import com.capken.catdogtube.function.player.PlayerFragment;
-import com.capken.catdogtube.function.video.data.search.youtube.YouTubeDataSource;
-import com.capken.catdogtube.function.video.domain.search.SearchWordProvider;
-import com.capken.catdogtube.function.video.presentation.collection.VideoCollectionFragment;
-import com.capken.catdogtube.function.video.presentation.segmented.SegmentFactory;
+import com.capken.catdogtube.function.player.PlayerPresenterModule;
 import com.capken.catdogtube.function.video.presentation.segmented.SegmentedFragment;
-import com.capken.catdogtubedomain.player.PlayVideoPresenter;
+import com.capken.catdogtube.function.video.presentation.segmented.SegmentsPresenterModule;
 import com.capken.catdogtubedomain.player.PlayerContract;
-import com.capken.catdogtubedomain.video.domain.model.ContentType;
-import com.capken.catdogtubedomain.video.domain.search.SearchVideoRepository;
-import com.capken.catdogtubedomain.video.domain.search.SearchVideoUseCase;
-import com.capken.catdogtubedomain.video.presentation.collection.LoadVideoPresenter;
-import com.capken.catdogtubedomain.video.presentation.collection.VideoCollectionContract;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentedContract;
-import com.capken.catdogtubedomain.video.presentation.segmented.SegmentsPresenter;
 import com.google.android.youtube.player.YouTubePlayer;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.inject.Inject;
 
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 
@@ -36,14 +25,14 @@ import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
  */
 
 public final class MainActivity extends AppCompatActivity implements
-        YouTubePlayer.OnFullscreenListener,
-        SegmentedFragment.PresenterOwner,
-        PlayerFragment.PresenterOwner,
-        VideoCollectionFragment.PresenterOwner {
+        YouTubePlayer.OnFullscreenListener {
 
-    private PlayerContract.Presenter mPlayerPresenter;
-    private SegmentedContract.Presenter mSegmentsPresenter;
-    private Map<Integer, VideoCollectionContract.Presenter> mVideoCollectionPresenters = new HashMap<>();
+    @Inject
+    PlayerContract.Presenter mPlayerPresenter;
+
+    @Inject
+    SegmentedContract.Presenter mSegmentsPresenter;
+
     private PlayerFragment mPlayerFragment;
     private SegmentedFragment mSegmentedFragment;
 
@@ -53,45 +42,25 @@ public final class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().hide();
-        if (Screen.isTablet(this)){ setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);}
+        if (Screen.isTablet(this)) {
+            setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
+        }
 
-        mPlayerFragment = (PlayerFragment) getSupportFragmentManager().findFragmentById(R.id.player_fragment);
-        mSegmentedFragment = (SegmentedFragment) getSupportFragmentManager().findFragmentById(R.id.container_segmented);
+        mPlayerFragment = (PlayerFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.player_fragment);
+        mSegmentedFragment = (SegmentedFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.container_segmented);
+
+        injectDependency();
     }
 
-    @Override
-    public void bindToPresenter(SegmentedContract.View view) {
-        if (mSegmentsPresenter == null) {
-            mSegmentsPresenter =
-                    new SegmentsPresenter(view, new SegmentFactory());
-        }
-    }
-
-    @Override
-    public void bindToPresenter(PlayerContract.View view) {
-        if (mPlayerPresenter == null) {
-            mPlayerPresenter = new PlayVideoPresenter(view);
-            for (VideoCollectionContract.Presenter collectionPresenter: mVideoCollectionPresenters.values()) {
-                collectionPresenter.setPlayer(mPlayerPresenter);
-            }
-        }
-    }
-
-    @Override
-    public void bindToPresenter(VideoCollectionContract.View view, ContentType contentType, int index) {
-        VideoCollectionContract.Presenter presenter = mVideoCollectionPresenters.get(index);
-        if (presenter == null) {
-            SearchVideoRepository repo = new SearchVideoRepository(new YouTubeDataSource());
-            SearchWordProvider provider = new SearchWordProvider(this);
-            SearchVideoUseCase useCase = new SearchVideoUseCase(repo, contentType, provider);
-
-            presenter =
-                    new LoadVideoPresenter(view, useCase, new ThreadExecutor(), mPlayerPresenter);
-            if (index == 0) {
-                presenter.markAsPrimal();
-            }
-            mVideoCollectionPresenters.put(index, presenter);
-        }
+    private void injectDependency() {
+        ApplicationComponent comp = DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(getApplication().getApplicationContext()))
+                .playerPresenterModule(new PlayerPresenterModule(mPlayerFragment))
+                .segmentsPresenterModule(new SegmentsPresenterModule(mSegmentedFragment))
+                .build();
+        comp.inject(this);
     }
 
     @Override
@@ -111,20 +80,15 @@ public final class MainActivity extends AppCompatActivity implements
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             mSegmentedFragment.getView().setVisibility(View.VISIBLE);
-            playerParams.height = Screen.isTablet(this) ? LayoutParams.MATCH_PARENT : LayoutParams.WRAP_CONTENT;
+            playerParams.height = Screen.isTablet(this) ?
+                    LayoutParams.MATCH_PARENT : LayoutParams.WRAP_CONTENT;
         }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        updateLayout(isLandscape());
-    }
-
-    private boolean isLandscape() {
-        return getResources().getConfiguration().orientation ==
-                Configuration.ORIENTATION_LANDSCAPE;
-
+        updateLayout(Screen.isLandscape(this));
     }
 
 }

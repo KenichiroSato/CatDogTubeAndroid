@@ -1,6 +1,5 @@
 package com.capken.catdogtube.function.video.presentation.collection;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,8 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.capken.catdogtube.R;
-import com.capken.catdogtube.function.video.presentation.segmented.SegmentFactory;
-import com.capken.catdogtubedomain.video.domain.model.ContentType;
 import com.capken.catdogtubedomain.video.domain.model.Video;
 import com.capken.catdogtubedomain.video.presentation.collection.VideoCollectionContract;
 
@@ -30,27 +27,12 @@ import java.util.List;
 
 public final class VideoCollectionFragment extends Fragment implements VideoCollectionContract.View {
 
-    public interface PresenterOwner {
-        void bindToPresenter(VideoCollectionContract.View view, ContentType type, int index);
-    }
-
     private RecyclerView mVideoRecyclerView;
     private ImageView mReloadIcon;
     private ProgressBar mProgressBar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private VideoCollectionContract.Presenter mPresenter;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof VideoCollectionFragment.PresenterOwner) {
-            VideoCollectionFragment.PresenterOwner owner = (VideoCollectionFragment.PresenterOwner) context;
-            ContentType type = (ContentType) getArguments().getSerializable(SegmentFactory.KEY_CONTENT_TYPE);
-            int index = getArguments().getInt(SegmentFactory.KEY_INDEX);
-            owner.bindToPresenter(this, type, index);
-        }
-    }
 
     @Override
     public void onDetach() {
