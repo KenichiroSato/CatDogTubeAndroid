@@ -103,6 +103,12 @@ public final class SegmentedFragment extends Fragment implements SegmentedContra
 
     }
 
+    @Override
+    public void setVisibility(boolean isVisible) {
+        int visibility = isVisible ? View.VISIBLE : View.GONE;
+        getView().setVisibility(visibility);
+    }
+
     private class SegmentedPagerAdapter extends FragmentPagerAdapter {
 
         SegmentedPagerAdapter(FragmentManager fm) {

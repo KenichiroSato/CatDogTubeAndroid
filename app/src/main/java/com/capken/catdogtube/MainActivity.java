@@ -3,9 +3,7 @@ package com.capken.catdogtube;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.LinearLayout.LayoutParams;
 
 import com.capken.catdogtube.common.Screen;
 import com.capken.catdogtube.function.player.PlayerFragment;
@@ -33,9 +31,6 @@ public final class MainActivity extends AppCompatActivity implements
     @Inject
     SegmentedContract.Presenter mSegmentsPresenter;
 
-    private PlayerFragment mPlayerFragment;
-    private SegmentedFragment mSegmentedFragment;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,19 +41,19 @@ public final class MainActivity extends AppCompatActivity implements
             setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
         }
 
-        mPlayerFragment = (PlayerFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.player_fragment);
-        mSegmentedFragment = (SegmentedFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.container_segmented);
-
         injectDependency();
     }
 
     private void injectDependency() {
+        PlayerFragment playerFragment = (PlayerFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.player_fragment);
+        SegmentedFragment segmentedFragment = (SegmentedFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.container_segmented);
+
         ApplicationComponent comp = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(getApplication().getApplicationContext()))
-                .playerPresenterModule(new PlayerPresenterModule(mPlayerFragment))
-                .segmentsPresenterModule(new SegmentsPresenterModule(mSegmentedFragment))
+                .playerPresenterModule(new PlayerPresenterModule(playerFragment))
+                .segmentsPresenterModule(new SegmentsPresenterModule(segmentedFragment))
                 .build();
         comp.inject(this);
     }
@@ -69,20 +64,13 @@ public final class MainActivity extends AppCompatActivity implements
     }
 
     private void updateLayout(boolean isFullScreen) {
-        LayoutParams playerParams =
-                (LayoutParams) mPlayerFragment.getView().getLayoutParams();
-
         if (isFullScreen) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            mSegmentedFragment.getView().setVisibility(View.GONE);
-            playerParams.height = LayoutParams.MATCH_PARENT;
-
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            mSegmentedFragment.getView().setVisibility(View.VISIBLE);
-            playerParams.height = Screen.isTablet(this) ?
-                    LayoutParams.MATCH_PARENT : LayoutParams.WRAP_CONTENT;
         }
+        mPlayerPresenter.updateLayout(isFullScreen);
+        mSegmentsPresenter.updateLayout(isFullScreen);
     }
 
     @Override

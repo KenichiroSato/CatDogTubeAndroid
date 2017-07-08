@@ -2,6 +2,9 @@ package com.capken.catdogtube.function.player;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
 
 import com.capken.catdogtube.MainActivity;
 import com.capken.catdogtube.common.Screen;
@@ -107,5 +110,19 @@ public final class PlayerFragment extends YouTubePlayerSupportFragment
     @Override
     public void showPlayer() {
 
+    }
+
+    @Override
+    public void changeLayout(boolean isFullScreen) {
+        LinearLayout.LayoutParams playerParams =
+                (LinearLayout.LayoutParams) getView().getLayoutParams();
+
+        if (isFullScreen) {
+            playerParams.height = LinearLayout.LayoutParams.MATCH_PARENT;
+        } else {
+            playerParams.height = Screen.isTablet(getContext()) ?
+                    LinearLayout.LayoutParams.MATCH_PARENT :
+                    LinearLayout.LayoutParams.WRAP_CONTENT;
+        }
     }
 }
