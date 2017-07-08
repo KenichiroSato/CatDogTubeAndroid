@@ -13,9 +13,14 @@ interface SegmentedContract {
 
         fun reorder(segments: List<SegmentProtocol>)
 
+        //only Android
+        fun setVisibility(isVisible: Boolean)
     }
 
     interface Presenter {
         fun loadSegments()
+
+        //only Android
+        fun updateLayout(isFullScreen: Boolean)
     }
 }

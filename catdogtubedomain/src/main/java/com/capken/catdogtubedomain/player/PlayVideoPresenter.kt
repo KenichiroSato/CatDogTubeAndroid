@@ -7,7 +7,6 @@ import com.capken.catdogtubedomain.video.domain.model.Video
  */
 
 class PlayVideoPresenter(val view: PlayerContract.View): PlayerContract.Presenter {
-
     //var view: PlayerContract.View
 
     private var hasPlayed = false
@@ -25,6 +24,10 @@ class PlayVideoPresenter(val view: PlayerContract.View): PlayerContract.Presente
         if (shouldPlayVideo(hasPlayed)) {
             play(video)
         }
+    }
+
+    override fun updateLayout(isFullScreen: Boolean) {
+        view.changeLayout(isFullScreen)
     }
 
     fun shouldPlayVideo(hasPlayed: Boolean) : Boolean {

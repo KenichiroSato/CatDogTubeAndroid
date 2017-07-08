@@ -26,6 +26,9 @@ class PlayerContract {
 
         fun showPlayer()
 
+        //only Android
+        fun changeLayout(isFullScreen: Boolean)
+
     }
 
     interface Presenter {
@@ -33,5 +36,7 @@ class PlayerContract {
 
         fun onVideoTapped(video: Video)
 
+        //Android only
+        fun updateLayout(isFullScreen: Boolean)
     }
 }

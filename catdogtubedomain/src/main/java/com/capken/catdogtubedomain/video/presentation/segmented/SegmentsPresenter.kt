@@ -9,7 +9,6 @@ import com.capken.catdogtubedomain.player.PlayerContract
 class SegmentsPresenter(private var view: SegmentedContract.View,
                         private val playerPresenter: PlayerContract.Presenter,
                         private val segmentFactory: SegmentFactoryProtocol) : SegmentedContract.Presenter {
-
     init {
         view.setPresenter(this)
     }
@@ -23,6 +22,11 @@ class SegmentsPresenter(private var view: SegmentedContract.View,
     override fun loadSegments() {
         segments = segmentFactory.createSegments(playerPresenter)
         view.show(segments)
+    }
+
+    override fun updateLayout(isFullScreen: Boolean) {
+        val isVisible = !isFullScreen
+        view.setVisibility(isVisible)
     }
 
     /*
