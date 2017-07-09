@@ -45,7 +45,7 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_video_collection, container, false);
-        mVideoRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        setupVideoRecyclerView(view);
         mReloadIcon = (ImageView) view.findViewById(R.id.loading_icon);
         mReloadIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +58,23 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
 
         return view;
+    }
+
+    private void setupVideoRecyclerView(View view) {
+        mVideoRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        mVideoRecyclerView.setHasFixedSize(true);
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, 1);
+        mVideoRecyclerView.setLayoutManager(gridLayoutManager);
+        RecyclerViewAdapter rcAdapter =
+                new RecyclerViewAdapter(getContext(), new VideoTappedListener() {
+                    @Override
+                    public void onTapped(Video video) {
+                        if (mPresenter != null) {
+                            mPresenter.onVideoTapped(video);
+                        }
+                    }
+                });
+        mVideoRecyclerView.setAdapter(rcAdapter);
     }
 
     @Override
@@ -80,14 +97,7 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
 
     @Override
     public void show(@NotNull List<Video> videos) {
-        if (mVideoRecyclerView != null) {
-            mVideoRecyclerView.setHasFixedSize(true);
-            StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, 1);
-            mVideoRecyclerView.setLayoutManager(gridLayoutManager);
-            RecyclerViewAdapter rcAdapter =
-                    new RecyclerViewAdapter(getContext(), videos, mPresenter);
-            mVideoRecyclerView.setAdapter(rcAdapter);
-        }
+        ((RecyclerViewAdapter) mVideoRecyclerView.getAdapter()).setVideoList(videos);
     }
 
     @Override
@@ -115,10 +125,11 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-        @Override
-        public void onRefresh() {
-            mPresenter.loadVideo(false);
-        }
-    };
+    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener =
+            new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    mPresenter.loadVideo(false);
+                }
+            };
 }
