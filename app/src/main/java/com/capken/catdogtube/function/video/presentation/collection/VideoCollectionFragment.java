@@ -84,7 +84,8 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
             mVideoRecyclerView.setHasFixedSize(true);
             StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, 1);
             mVideoRecyclerView.setLayoutManager(gridLayoutManager);
-            RecyclerViewAdapter rcAdapter = new RecyclerViewAdapter(getContext(), videos, mPresenter);
+            RecyclerViewAdapter rcAdapter =
+                    new RecyclerViewAdapter(getContext(), videos, mPresenter);
             mVideoRecyclerView.setAdapter(rcAdapter);
         }
     }

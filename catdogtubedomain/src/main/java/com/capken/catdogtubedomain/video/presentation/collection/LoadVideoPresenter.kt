@@ -12,7 +12,8 @@ import com.capken.catdogtubedomain.video.domain.model.Video
 class LoadVideoPresenter(private val view: VideoCollectionContract.View,
                          private val useCase: LoadVideoUseCase,
                          private val executor: ThreadExecutorProtocol,
-                         var playerPresenter: PlayerContract.Presenter?) : VideoCollectionContract.Presenter {
+                         var playerPresenter: PlayerContract.Presenter?)
+    : VideoCollectionContract.Presenter {
 
     init {
         view.setPresenter(this)
