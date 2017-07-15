@@ -1,7 +1,5 @@
 package com.capken.catdogtube.function.video.data.search.youtube;
 
-import android.util.Log;
-
 import com.capken.catdogtubedomain.video.data.YouTubeVideo;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

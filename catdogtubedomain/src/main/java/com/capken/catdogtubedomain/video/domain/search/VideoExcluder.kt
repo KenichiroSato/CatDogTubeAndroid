@@ -67,7 +67,8 @@ class VideoExcluder {
                 "日本橋",
                 "りゅりゅ",
                 "うんこ",
-                "リンゴの森"
+                "リンゴの森",
+                "禁欲"
         )
 
         fun excludeInappropriateVideos(videos: List<Video>?): List<Video>? {

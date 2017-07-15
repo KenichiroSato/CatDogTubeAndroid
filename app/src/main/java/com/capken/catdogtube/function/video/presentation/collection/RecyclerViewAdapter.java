@@ -11,6 +11,7 @@ import com.capken.catdogtubedomain.video.domain.model.Video;
 import com.capken.catdogtubedomain.video.presentation.collection.VideoCollectionContract;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,15 +22,18 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<VideoViewHolder> {
 
     private List<Video> mItemList;
     final private Context mContext;
-    final private VideoCollectionContract.Presenter mPresenter;
+    final private VideoTappedListener mListener;
 
-
-    public RecyclerViewAdapter(Context context,
-                               List<Video> itemList,
-                               VideoCollectionContract.Presenter presenter) {
-        mItemList = itemList;
+    RecyclerViewAdapter(Context context,
+                               VideoTappedListener listener) {
         mContext = context;
-        mPresenter = presenter;
+        mListener = listener;
+        mItemList = new ArrayList<>();
+    }
+
+    void setVideoList(List<Video> list) {
+        mItemList = list;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -46,7 +50,7 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<VideoViewHolder> {
         holder.mItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPresenter.onVideoTapped(mItemList.get(position));
+                mListener.onTapped(mItemList.get(position));
             }
         });
     }
