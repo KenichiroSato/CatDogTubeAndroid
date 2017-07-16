@@ -6,6 +6,7 @@ import com.capken.catdogtubedomain.video.data.YouTubeVideo;
 import com.capken.catdogtubedomain.video.domain.search.SearchVideoDataSourceProtocol;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -41,12 +42,13 @@ public final class YouTubeDataSource implements SearchVideoDataSourceProtocol {
 
     @Override
     public void searchVideos(@NotNull String searchWord,
+                             @Nullable String token,
                              @NotNull final Function2<? super List<YouTubeVideo>,
                                      ? super String, Unit> completionHandler) {
 
         PublishedParamPair publishedParam = generatePublishedParams();
         OkHttpClient client = new OkHttpClient();
-        HttpUrl url = new HttpUrl.Builder()
+        HttpUrl.Builder builder = new HttpUrl.Builder()
                 .scheme("https")
                 .host("www.googleapis.com")
                 .addPathSegments("youtube/v3/search")
@@ -58,8 +60,11 @@ public final class YouTubeDataSource implements SearchVideoDataSourceProtocol {
                 .addQueryParameter("maxResults", "50")
                 .addQueryParameter("order", "viewCount")
                 .addQueryParameter("publishedBefore", publishedParam.before)
-                .addQueryParameter("publishedAfter", publishedParam.after)
-                .build();
+                .addQueryParameter("publishedAfter", publishedParam.after);
+        if (token != null) {
+            builder.addQueryParameter("pageToken", token);
+        }
+        HttpUrl url = builder.build();
 
         Request request = new Request.Builder()
                 .url(url)

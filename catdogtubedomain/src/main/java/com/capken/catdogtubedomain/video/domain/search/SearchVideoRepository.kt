@@ -10,16 +10,16 @@ import com.capken.catdogtubedomain.video.domain.model.Video
  */
 
 interface SearchVideoDataSourceProtocol {
-    fun searchVideos(searchWord:String,
+    fun searchVideos(searchWord:String, token:String?,
                      completionHandler: (videoEntities:List<YouTubeVideo>?, token:String) -> Unit)
 }
 
 class SearchVideoRepository(val dataSource: SearchVideoDataSourceProtocol)
     : SearchVideoRepositoryProtocol {
 
-    override fun searchVideos(keyword:String, contentType: ContentType,
+    override fun searchVideos(keyword:String, contentType: ContentType, token:String?,
                      completionHandler: (videos:List<Video>?, token:String) -> Unit) {
-        dataSource.searchVideos(keyword, { videoEntities, token ->
+        dataSource.searchVideos(keyword, token, { videoEntities, token ->
                 val videos = VideoTranslater.translate(videoEntities, contentType)
             completionHandler(videos, token)
         })

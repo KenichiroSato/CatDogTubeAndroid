@@ -52,7 +52,7 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
         }
 
         executor.runOnBackground {
-            this.useCase.loadVideos { videos, token ->
+            this.useCase.loadVideos(pageToken) { videos, token ->
                 val nonNilVideos = videos?.let { it } ?: run {
                     this.onLoadFail()
                     return@loadVideos
