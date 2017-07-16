@@ -8,6 +8,6 @@ import com.capken.catdogtubedomain.video.domain.model.Video
 
 interface LoadVideoUseCase {
 
-    fun loadVideos(completionHandler: (videos:List<Video>?) -> Unit)
+    fun loadVideos(completionHandler: (videos:List<Video>?, token:String) -> Unit)
 
 }

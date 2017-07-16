@@ -15,11 +15,13 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
                          var playerPresenter: PlayerContract.Presenter?)
     : VideoCollectionContract.Presenter {
 
+    private var pageToken: String = ""
+
     init {
         view.setPresenter(this)
     }
 
-        // If true, top contents of this presenter' view will played when app is launched.
+    // If true, top contents of this presenter' view will played when app is launched.
     private var isPrimal = false
 
     private fun onLoadSuccess(videos: List<Video>) {
@@ -50,16 +52,12 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
         }
 
         executor.runOnBackground {
-            this.useCase.loadVideos { videos ->
+            this.useCase.loadVideos { videos, token ->
                 val nonNilVideos = videos?.let { it } ?: run {
                     this.onLoadFail()
                     return@loadVideos
                 }
-                /*
-                guard let nonNilVideos = videos , !nonNilVideos.isEmpty else {
-                this.onLoadFail()
-                return
-                */
+                this.pageToken = token
                 this.onLoadSuccess(nonNilVideos)
             }
         }

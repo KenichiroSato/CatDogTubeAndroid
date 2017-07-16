@@ -9,19 +9,21 @@ import com.capken.catdogtubedomain.video.domain.model.Video
  */
 
 interface SearchVideoRepositoryProtocol {
-    fun searchVideos(keyword:String, contentType: ContentType, completionHandler:  (videos:List<Video>?)-> Unit)
+    fun searchVideos(keyword:String, contentType: ContentType,
+                     completionHandler:  (videos:List<Video>?, token:String)-> Unit)
 }
 
 class SearchVideoUseCase(private val repository:SearchVideoRepositoryProtocol,
                           private val contentType: ContentType,
-                          private val searchWordProvider: SearchWordProviderProtocol): LoadVideoUseCase {
+                          private val searchWordProvider: SearchWordProviderProtocol)
+    : LoadVideoUseCase {
 
     // MARK: - LoadVideoUseCase
-    override fun loadVideos(completionHandler: (videos:List<Video>?) -> Unit) {
+    override fun loadVideos(completionHandler: (videos:List<Video>?, token:String) -> Unit) {
         repository.searchVideos(searchWordProvider.searchWord(contentType),
-                contentType) { videos ->
+                contentType) { videos, token ->
                 val okVideos = VideoExcluder.excludeInappropriateVideos(videos)
-            completionHandler(okVideos)
+            completionHandler(okVideos, token)
         }
     }
 }
