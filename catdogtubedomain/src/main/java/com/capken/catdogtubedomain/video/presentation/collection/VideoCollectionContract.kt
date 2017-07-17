@@ -32,5 +32,7 @@ interface VideoCollectionContract {
 
         fun onVideoTapped(video: Video)
 
+        fun onScrolled(visiblePosition: Int)
+
     }
 }

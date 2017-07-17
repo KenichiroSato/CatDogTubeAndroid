@@ -15,7 +15,14 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
                          var playerPresenter: PlayerContract.Presenter?)
     : VideoCollectionContract.Presenter {
 
+    //Trigger the additional data load when RecyclerView scroll position is near to bottom
+    private val LOAD_TRIGGER = 20
+
     private var pageToken: String = ""
+
+    private var isLoading = false
+
+    private var videoList: MutableList<Video> = mutableListOf()
 
     init {
         view.setPresenter(this)
@@ -29,8 +36,10 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
             if (this.isPrimal) {
                 this.playerPresenter?.onVideoLoaded(videos)
             }
-            this.view.show(videos)
+            videoList.addAll(videos)
+            this.view.show(videoList)
             this.view.hideErrorUI()
+            isLoading = false
         }
     }
 
@@ -38,6 +47,7 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
         executor.runOnMain {
             this.view.show(emptyList())
             this.view.showErrorUI()
+            isLoading = false
         }
     }
 
@@ -47,18 +57,23 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
     }
 
     override fun loadVideo(withFullScreenIndicator: Boolean) {
-        if (withFullScreenIndicator) {
-            view.showLoadingIndicator()
-        }
+        print("loadVideo")
+        executor.runOnMain {
+            if (isLoading) { return@runOnMain }
+            isLoading = true
+            if (withFullScreenIndicator) {
+                view.showLoadingIndicator()
+            }
 
-        executor.runOnBackground {
-            this.useCase.loadVideos(pageToken) { videos, token ->
-                val nonNilVideos = videos?.let { it } ?: run {
-                    this.onLoadFail()
-                    return@loadVideos
+            executor.runOnBackground {
+                this.useCase.loadVideos(pageToken) { videos, token ->
+                    val nonNilVideos = videos?.let { it } ?: run {
+                        this.onLoadFail()
+                        return@loadVideos
+                    }
+                    this.pageToken = token
+                    this.onLoadSuccess(nonNilVideos)
                 }
-                this.pageToken = token
-                this.onLoadSuccess(nonNilVideos)
             }
         }
     }
@@ -69,5 +84,11 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
 
     override fun onVideoTapped(video: Video) {
         playerPresenter?.onVideoTapped(video)
+    }
+
+    override fun onScrolled(visiblePosition: Int) {
+        if (visiblePosition > videoList.size - LOAD_TRIGGER) {
+            loadVideo(false)
+        }
     }
 }
