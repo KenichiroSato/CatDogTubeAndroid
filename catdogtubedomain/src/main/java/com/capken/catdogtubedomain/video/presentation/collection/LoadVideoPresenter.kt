@@ -18,7 +18,7 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
     //Trigger the additional data load when RecyclerView scroll position is near to bottom
     private val LOAD_TRIGGER = 20
 
-    private var pageToken: String = ""
+    private var pageToken: String? = null
 
     private var isLoading = false
 
@@ -47,8 +47,14 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
         executor.runOnMain {
             this.view.show(emptyList())
             this.view.showErrorUI()
+            clearVideos()
             isLoading = false
         }
+    }
+
+    private fun clearVideos() {
+        videoList.clear()
+        pageToken = null
     }
 
     // MARK: VideoCollectionContract_Presenter
@@ -56,12 +62,12 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
         playerPresenter = player
     }
 
-    override fun loadVideo(withFullScreenIndicator: Boolean) {
+    override fun loadVideo() {
         print("loadVideo")
         executor.runOnMain {
             if (isLoading) { return@runOnMain }
             isLoading = true
-            if (withFullScreenIndicator) {
+            if (videoList.size == 0) {
                 view.showLoadingIndicator()
             }
 
@@ -78,6 +84,11 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
         }
     }
 
+    override fun refreshVideos() {
+        clearVideos()
+        loadVideo()
+    }
+
     override fun markAsPrimal() {
         isPrimal = true
     }
@@ -88,7 +99,7 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
 
     override fun onScrolled(visiblePosition: Int) {
         if (visiblePosition > videoList.size - LOAD_TRIGGER) {
-            loadVideo(false)
+            loadVideo()
         }
     }
 }

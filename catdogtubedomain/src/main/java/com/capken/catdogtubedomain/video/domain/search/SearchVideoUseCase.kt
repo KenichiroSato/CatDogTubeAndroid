@@ -12,7 +12,7 @@ interface SearchVideoRepositoryProtocol {
     fun searchVideos(keyword:String,
                      contentType: ContentType,
                      token: String?,
-                     completionHandler:  (videos:List<Video>?, token:String)-> Unit)
+                     completionHandler:  (videos:List<Video>?, token:String?)-> Unit)
 }
 
 class SearchVideoUseCase(private val repository:SearchVideoRepositoryProtocol,
@@ -22,7 +22,7 @@ class SearchVideoUseCase(private val repository:SearchVideoRepositoryProtocol,
 
     // MARK: - LoadVideoUseCase
     override fun loadVideos(token: String?,
-                            completionHandler: (videos:List<Video>?, token:String) -> Unit) {
+                            completionHandler: (videos:List<Video>?, token:String?) -> Unit) {
         repository.searchVideos(searchWordProvider.searchWord(contentType),
                 contentType, token) { videos, token ->
                 val okVideos = VideoExcluder.excludeInappropriateVideos(videos)

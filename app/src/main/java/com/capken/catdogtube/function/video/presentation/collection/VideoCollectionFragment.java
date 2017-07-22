@@ -50,7 +50,7 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
         mReloadIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPresenter.loadVideo(true);
+                mPresenter.loadVideo();
             }
         });
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.pull_to_refresh);
@@ -92,7 +92,7 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPresenter.loadVideo(true);
+        mPresenter.loadVideo();
     }
 
 
@@ -141,7 +141,7 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
             new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    mPresenter.loadVideo(false);
+                    mPresenter.refreshVideos();
                 }
             };
 }

@@ -28,7 +28,9 @@ interface VideoCollectionContract {
 
         fun setPlayer(player: PlayerContract.Presenter)
 
-        fun loadVideo(withFullScreenIndicator:Boolean)
+        fun loadVideo()
+
+        fun refreshVideos()
 
         fun onVideoTapped(video: Video)
 

@@ -61,7 +61,7 @@ public final class YouTubeDataSource implements SearchVideoDataSourceProtocol {
                 .addQueryParameter("order", "viewCount")
                 .addQueryParameter("publishedBefore", publishedParam.before)
                 .addQueryParameter("publishedAfter", publishedParam.after);
-        if (token != null) {
+        if (token != null && !token.isEmpty()) {
             builder.addQueryParameter("pageToken", token);
         }
         HttpUrl url = builder.build();
