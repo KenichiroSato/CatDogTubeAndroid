@@ -58,10 +58,6 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
     }
 
     // MARK: VideoCollectionContract_Presenter
-    override fun setPlayer(player: PlayerContract.Presenter) {
-        playerPresenter = player
-    }
-
     override fun loadVideo() {
         print("loadVideo")
         executor.runOnMain {

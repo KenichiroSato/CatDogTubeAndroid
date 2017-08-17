@@ -26,8 +26,6 @@ interface VideoCollectionContract {
 
     interface Presenter: SegmentContract.Presenter {
 
-        fun setPlayer(player: PlayerContract.Presenter)
-
         fun loadVideo()
 
         fun refreshVideos()
