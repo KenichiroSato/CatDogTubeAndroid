@@ -22,6 +22,8 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
 
     private var isLoading = false
 
+    private var isPaginationFinished = false
+
     private var videoList: MutableList<Video> = mutableListOf()
 
     init {
@@ -36,9 +38,13 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
             if (this.isPrimal) {
                 this.playerPresenter?.onVideoLoaded(videos)
             }
-            videoList.addAll(videos)
-            this.view.show(videoList)
-            this.view.hideErrorUI()
+            if (videos.isEmpty()) {
+                isPaginationFinished = true
+            } else {
+                videoList.addAll(videos)
+                view.show(videoList)
+            }
+            view.hideErrorUI()
             isLoading = false
         }
     }
@@ -57,32 +63,48 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
         pageToken = null
     }
 
-    // MARK: VideoCollectionContract_Presenter
-    override fun loadVideo() {
+    private fun isLoadSuccess(opVideos: List<Video>?): Boolean {
+        val videos = opVideos?.let { it } ?: run {
+            return false
+        }
+        if (videos.isEmpty() && pageToken == null) {
+            return false
+        }
+        return true
+    }
+
+    private fun loadVideo(withIndocator: Boolean) {
         print("loadVideo")
         executor.runOnMain {
-            if (isLoading) { return@runOnMain }
+            if (isLoading) {
+                return@runOnMain
+            }
             isLoading = true
-            if (videoList.size == 0) {
+            if (withIndocator) {
                 view.showLoadingIndicator()
             }
-
             executor.runOnBackground {
                 this.useCase.loadVideos(pageToken) { videos, token ->
-                    val nonNilVideos = videos?.let { it } ?: run {
+                    if (!isLoadSuccess(videos)) {
                         this.onLoadFail()
                         return@loadVideos
                     }
                     this.pageToken = token
-                    this.onLoadSuccess(nonNilVideos)
+                    this.onLoadSuccess(videos!!) // videos is not null
                 }
             }
         }
     }
 
+    override fun loadVideo() {
+        val needIndicator = videoList.size == 0
+        loadVideo(needIndicator)
+    }
+
     override fun refreshVideos() {
         clearVideos()
-        loadVideo()
+        isPaginationFinished = false
+        loadVideo(false)
     }
 
     override fun markAsPrimal() {
@@ -94,8 +116,11 @@ class LoadVideoPresenter(private val view: VideoCollectionContract.View,
     }
 
     override fun onScrolled(visiblePosition: Int) {
+        if (isPaginationFinished) {
+            return
+        }
         if (visiblePosition > videoList.size - LOAD_TRIGGER) {
-            loadVideo()
+            loadVideo(false)
         }
     }
 }
