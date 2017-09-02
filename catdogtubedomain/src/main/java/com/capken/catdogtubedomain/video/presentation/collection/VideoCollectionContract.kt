@@ -26,11 +26,13 @@ interface VideoCollectionContract {
 
     interface Presenter: SegmentContract.Presenter {
 
-        fun setPlayer(player: PlayerContract.Presenter)
+        fun loadVideo()
 
-        fun loadVideo(withFullScreenIndicator:Boolean)
+        fun refreshVideos()
 
         fun onVideoTapped(video: Video)
+
+        fun onScrolled(visiblePosition: Int)
 
     }
 }

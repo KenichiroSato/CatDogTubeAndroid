@@ -50,7 +50,7 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
         mReloadIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPresenter.loadVideo(true);
+                mPresenter.loadVideo();
             }
         });
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.pull_to_refresh);
@@ -63,9 +63,9 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
     private void setupVideoRecyclerView(View view) {
         mVideoRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mVideoRecyclerView.setHasFixedSize(true);
-        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, 1);
+        final StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, 1);
         mVideoRecyclerView.setLayoutManager(gridLayoutManager);
-        RecyclerViewAdapter rcAdapter =
+        final RecyclerViewAdapter rcAdapter =
                 new RecyclerViewAdapter(getContext(), new VideoTappedListener() {
                     @Override
                     public void onTapped(Video video) {
@@ -74,13 +74,25 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
                         }
                     }
                 });
+
+        RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                // int[0] : left row of recyclerView
+                // int[1] : right row of recyclerView
+                int[] lastVisible =
+                        gridLayoutManager.findLastCompletelyVisibleItemPositions(null);
+                mPresenter.onScrolled(lastVisible[1]);
+            }
+        };
+        mVideoRecyclerView.addOnScrollListener(mScrollListener);
         mVideoRecyclerView.setAdapter(rcAdapter);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPresenter.loadVideo(true);
+        mPresenter.loadVideo();
     }
 
 
@@ -129,7 +141,7 @@ public final class VideoCollectionFragment extends Fragment implements VideoColl
             new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    mPresenter.loadVideo(false);
+                    mPresenter.refreshVideos();
                 }
             };
 }

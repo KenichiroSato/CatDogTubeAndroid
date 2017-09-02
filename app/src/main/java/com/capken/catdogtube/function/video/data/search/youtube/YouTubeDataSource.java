@@ -1,22 +1,17 @@
 package com.capken.catdogtube.function.video.data.search.youtube;
 
 import android.util.Log;
-import android.util.TimeUtils;
 
 import com.capken.catdogtubedomain.video.data.YouTubeVideo;
 import com.capken.catdogtubedomain.video.domain.search.SearchVideoDataSourceProtocol;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
@@ -24,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 import info.vividcode.time.iso8601.Iso8601ExtendedOffsetDateTimeFormat;
 import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function2;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -47,11 +42,13 @@ public final class YouTubeDataSource implements SearchVideoDataSourceProtocol {
 
     @Override
     public void searchVideos(@NotNull String searchWord,
-                             @NotNull final Function1<? super List<YouTubeVideo>, Unit> completionHandler) {
+                             @Nullable String token,
+                             @NotNull final Function2<? super List<YouTubeVideo>,
+                                     ? super String, Unit> completionHandler) {
 
         PublishedParamPair publishedParam = generatePublishedParams();
         OkHttpClient client = new OkHttpClient();
-        HttpUrl url = new HttpUrl.Builder()
+        HttpUrl.Builder builder = new HttpUrl.Builder()
                 .scheme("https")
                 .host("www.googleapis.com")
                 .addPathSegments("youtube/v3/search")
@@ -63,8 +60,11 @@ public final class YouTubeDataSource implements SearchVideoDataSourceProtocol {
                 .addQueryParameter("maxResults", "50")
                 .addQueryParameter("order", "viewCount")
                 .addQueryParameter("publishedBefore", publishedParam.before)
-                .addQueryParameter("publishedAfter", publishedParam.after)
-                .build();
+                .addQueryParameter("publishedAfter", publishedParam.after);
+        if (token != null && !token.isEmpty()) {
+            builder.addQueryParameter("pageToken", token);
+        }
+        HttpUrl url = builder.build();
 
         Request request = new Request.Builder()
                 .url(url)
@@ -73,7 +73,7 @@ public final class YouTubeDataSource implements SearchVideoDataSourceProtocol {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d("tag", e.getMessage());
-                completionHandler.invoke(null);
+                completionHandler.invoke(null, null);
             }
 
             @Override
@@ -82,11 +82,13 @@ public final class YouTubeDataSource implements SearchVideoDataSourceProtocol {
                 // ステータスコードが200かどうか
                 if (response.code() == 200) {
                     generatePublishedParams();
-                    List<YouTubeVideo> videos = YouTubeDataParser.parse(response.body().string());
-                    completionHandler.invoke(videos);
+                    String res = response.body().string();
+                    List<YouTubeVideo> videos = YouTubeDataParser.parse(res);
+                    String token = YouTubeDataParser.getPageToken(res);
+                    completionHandler.invoke(videos, token);
                 } else {
                     Log.d("tag", "res=" + response.toString());
-                    completionHandler.invoke(null);
+                    completionHandler.invoke(null, null);
                 }
             }
         });

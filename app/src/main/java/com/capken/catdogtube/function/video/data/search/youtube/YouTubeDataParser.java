@@ -34,4 +34,9 @@ final class YouTubeDataParser {
         }
         return list;
     }
+
+    static String getPageToken(String response) {
+        JsonObject json = new Gson().fromJson(response, JsonObject.class);
+        return json.get("nextPageToken").getAsString();
+    }
 }

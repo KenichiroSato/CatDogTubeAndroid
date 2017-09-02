@@ -68,7 +68,12 @@ class VideoExcluder {
                 "りゅりゅ",
                 "うんこ",
                 "リンゴの森",
-                "禁欲"
+                "禁欲",
+                "やんちゃな",
+                "ペットショップ",
+                "きくちペット",
+                "歌ってみた",
+                "ショッキング"
         )
 
         fun excludeInappropriateVideos(videos: List<Video>?): List<Video>? {
