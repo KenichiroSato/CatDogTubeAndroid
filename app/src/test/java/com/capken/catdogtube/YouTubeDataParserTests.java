@@ -50,7 +50,7 @@ public class YouTubeDataParserTests {
 
         assertEquals(video.getTitle(), "Three Little Kittens");
         assertEquals(video.getVideoId(), "k6X2wJ6L0SY");
-        assertEquals(video.getImageUrl(), "https://i.ytimg.com/vi/k6X2wJ6L0SY/mqdefault.jpg");
+        assertEquals(video.getImageUrl(), "https://i.ytimg.com/vi/k6X2wJ6L0SY/mqdefault.jpga");
     }
 
     @Test
