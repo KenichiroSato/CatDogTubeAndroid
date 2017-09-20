@@ -13,9 +13,9 @@ import java.util.List;
  * Created by ken on 2017/02/27..
  */
 
-final class YouTubeDataParser {
+public final class YouTubeDataParser {
 
-    static List<YouTubeVideo> parse(String response) {
+    public static List<YouTubeVideo> parse(String response) {
         JsonObject json = new Gson().fromJson(response, JsonObject.class);
         List<YouTubeVideo> list = new ArrayList<>();
 
@@ -35,7 +35,7 @@ final class YouTubeDataParser {
         return list;
     }
 
-    static String getPageToken(String response) {
+    public static String getPageToken(String response) {
         JsonObject json = new Gson().fromJson(response, JsonObject.class);
         return json.get("nextPageToken").getAsString();
     }
