@@ -28,7 +28,6 @@ public final class SegmentFactory implements SegmentFactoryProtocol {
 
     private final SearchWordProvider mWordProvider;
 
-    @Inject
     public SegmentFactory(SearchWordProvider provider) {
         mWordProvider = provider;
     }
