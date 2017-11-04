@@ -6,6 +6,6 @@ package com.capken.catdogtube.function.video.data.search.youtube;
 
 public final class YouTubeInfo {
 
-    public static final String INFO = "AIzaSyBHs3tQKF67rsa-p94hVyk2a9qozOI0DJk";
+    public static final String INFO = "key";
 
 }
