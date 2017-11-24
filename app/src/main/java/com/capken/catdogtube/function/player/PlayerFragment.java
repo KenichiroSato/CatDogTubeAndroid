@@ -1,9 +1,6 @@
 package com.capken.catdogtube.function.player;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.capken.catdogtube.MainActivity;
@@ -12,7 +9,6 @@ import com.capken.catdogtube.function.video.data.search.youtube.YouTubeInfo;
 import com.capken.catdogtubedomain.player.PlayerContract;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import org.jetbrains.annotations.NotNull;
