@@ -8,7 +8,7 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by ken on 2017/06/25..
+ * Provides SegmentedContract.Presenter
  */
 
 @Module
