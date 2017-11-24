@@ -1,11 +1,11 @@
 package com.capken.catdogtube.function.video.presentation.segmented;
 
 import com.capken.catdogtube.common.ThreadExecutor;
-import com.capken.catdogtube.function.video.data.search.youtube.YouTubeDataSource;
 import com.capken.catdogtube.function.video.domain.search.SearchWordProvider;
 import com.capken.catdogtube.function.video.presentation.collection.VideoCollectionFragment;
 import com.capken.catdogtubedomain.player.PlayerContract;
 import com.capken.catdogtubedomain.video.domain.model.ContentType;
+import com.capken.catdogtubedomain.video.domain.search.SearchVideoDataSourceProtocol;
 import com.capken.catdogtubedomain.video.domain.search.SearchVideoRepository;
 import com.capken.catdogtubedomain.video.domain.search.SearchVideoUseCase;
 import com.capken.catdogtubedomain.video.presentation.collection.LoadVideoPresenter;
@@ -28,8 +28,13 @@ public final class SegmentFactory implements SegmentFactoryProtocol {
 
     private final SearchWordProvider mWordProvider;
 
-    public SegmentFactory(SearchWordProvider provider) {
+    private final SearchVideoDataSourceProtocol mDataSource;
+
+    @Inject
+    public SegmentFactory(SearchWordProvider provider,
+                          SearchVideoDataSourceProtocol dataSource) {
         mWordProvider = provider;
+        mDataSource = dataSource;
     }
 
     @NotNull
@@ -47,7 +52,7 @@ public final class SegmentFactory implements SegmentFactoryProtocol {
 
         VideoCollectionFragment fragment = new VideoCollectionFragment();
 
-        SearchVideoRepository repo = new SearchVideoRepository(new YouTubeDataSource());
+        SearchVideoRepository repo = new SearchVideoRepository(mDataSource);
         SearchVideoUseCase useCase = new SearchVideoUseCase(repo, contentType, mWordProvider);
 
         VideoCollectionContract.Presenter presenter =

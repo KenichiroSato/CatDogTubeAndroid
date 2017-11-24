@@ -24,9 +24,8 @@ public class SegmentsPresenterModule {
     }
 
     @Provides
-    SegmentedContract.Presenter provideSegmentsPresenter(Context context,
-                                                         PlayerContract.Presenter player) {
-        SegmentFactory factory = new SegmentFactory(new SearchWordProvider(context));
+    SegmentedContract.Presenter provideSegmentsPresenter(PlayerContract.Presenter player,
+                                                         SegmentFactory factory) {
         return new SegmentsPresenter(mView, player, factory);
     }
 

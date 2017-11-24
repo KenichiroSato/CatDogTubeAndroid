@@ -1,6 +1,7 @@
 package com.capken.catdogtube;
 
 import com.capken.catdogtube.function.player.PlayerPresenterModule;
+import com.capken.catdogtube.function.video.data.search.youtube.YouTubeDataSourceModule;
 import com.capken.catdogtube.function.video.presentation.segmented.SegmentsPresenterModule;
 
 import dagger.Component;
@@ -10,6 +11,7 @@ import dagger.Component;
  */
 
 @Component(modules = {ApplicationModule.class,
+        YouTubeDataSourceModule.class,
         PlayerPresenterModule.class,
         SegmentsPresenterModule.class})
 public interface ApplicationComponent {
