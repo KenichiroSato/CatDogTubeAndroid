@@ -1,8 +1,5 @@
 package com.capken.catdogtube.function.video.presentation.segmented;
 
-import android.content.Context;
-
-import com.capken.catdogtube.function.video.domain.search.SearchWordProvider;
 import com.capken.catdogtubedomain.player.PlayerContract;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentedContract;
 import com.capken.catdogtubedomain.video.presentation.segmented.SegmentsPresenter;
