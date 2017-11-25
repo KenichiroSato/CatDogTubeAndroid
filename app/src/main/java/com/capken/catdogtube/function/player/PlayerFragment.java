@@ -61,7 +61,9 @@ public final class PlayerFragment extends YouTubePlayerSupportFragment
 
     //MARK: YouTubePlayer.OnInitializedListener
     @Override
-    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean restored) {
+    public void onInitializationSuccess(YouTubePlayer.Provider provider,
+                                        YouTubePlayer youTubePlayer,
+                                        boolean restored) {
         this.mPlayer = youTubePlayer;
         mPlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
         //In phone case, hide fullscreen button on screen.
@@ -75,7 +77,8 @@ public final class PlayerFragment extends YouTubePlayerSupportFragment
     }
 
     @Override
-    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+    public void onInitializationFailure(YouTubePlayer.Provider provider,
+                                        YouTubeInitializationResult youTubeInitializationResult) {
         this.mPlayer = null;
     }
 
