@@ -1,9 +1,6 @@
 package com.capken.catdogtube.function.player;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.capken.catdogtube.MainActivity;
@@ -12,7 +9,6 @@ import com.capken.catdogtube.function.video.data.search.youtube.YouTubeInfo;
 import com.capken.catdogtubedomain.player.PlayerContract;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import org.jetbrains.annotations.NotNull;
@@ -65,7 +61,9 @@ public final class PlayerFragment extends YouTubePlayerSupportFragment
 
     //MARK: YouTubePlayer.OnInitializedListener
     @Override
-    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean restored) {
+    public void onInitializationSuccess(YouTubePlayer.Provider provider,
+                                        YouTubePlayer youTubePlayer,
+                                        boolean restored) {
         this.mPlayer = youTubePlayer;
         mPlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
         //In phone case, hide fullscreen button on screen.
@@ -79,7 +77,8 @@ public final class PlayerFragment extends YouTubePlayerSupportFragment
     }
 
     @Override
-    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+    public void onInitializationFailure(YouTubePlayer.Provider provider,
+                                        YouTubeInitializationResult youTubeInitializationResult) {
         this.mPlayer = null;
     }
 
