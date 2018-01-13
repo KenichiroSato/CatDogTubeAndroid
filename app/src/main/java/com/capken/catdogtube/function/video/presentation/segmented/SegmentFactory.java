@@ -30,11 +30,15 @@ public final class SegmentFactory implements SegmentFactoryProtocol {
 
     private final SearchVideoDataSourceProtocol mDataSource;
 
+    private final ThreadExecutor mExecutor;
+
     @Inject
     public SegmentFactory(SearchWordProvider provider,
-                          SearchVideoDataSourceProtocol dataSource) {
+                          SearchVideoDataSourceProtocol dataSource,
+                          ThreadExecutor executor) {
         mWordProvider = provider;
         mDataSource = dataSource;
+        mExecutor = executor;
     }
 
     @NotNull
@@ -56,7 +60,7 @@ public final class SegmentFactory implements SegmentFactoryProtocol {
         SearchVideoUseCase useCase = new SearchVideoUseCase(repo, contentType, mWordProvider);
 
         VideoCollectionContract.Presenter presenter =
-                new LoadVideoPresenter(fragment, useCase, new ThreadExecutor(), playerPresenter);
+                new LoadVideoPresenter(fragment, useCase, mExecutor, playerPresenter);
         if (index == 0) {
             presenter.markAsPrimal();
         }

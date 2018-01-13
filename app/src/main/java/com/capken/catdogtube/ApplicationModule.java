@@ -2,6 +2,10 @@ package com.capken.catdogtube;
 
 import android.content.Context;
 
+import com.capken.catdogtube.common.ThreadExecutor;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -22,5 +26,9 @@ public class ApplicationModule {
     Context provideContext() {
         return mContext;
     }
+
+    @Singleton
+    @Provides
+    ThreadExecutor provideThreadExecutor() { return new ThreadExecutor(); }
 
 }
