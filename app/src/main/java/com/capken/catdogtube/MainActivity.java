@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
+import com.capken.catdogtube.common.CommandListFactory;
 import com.capken.catdogtube.common.Screen;
+import com.capken.catdogtube.common.TunePreparationExecutor;
 import com.capken.catdogtube.function.player.PlayerFragment;
 import com.capken.catdogtube.function.player.PlayerPresenterModule;
 import com.capken.catdogtube.function.video.presentation.segmented.SegmentedFragment;
@@ -42,6 +44,12 @@ public final class MainActivity extends AppCompatActivity implements
         }
 
         injectDependency();
+        tune();
+    }
+
+    private void tune() {
+        TunePreparationExecutor executor = new TunePreparationExecutor(this);
+        executor.execute(CommandListFactory.create());
     }
 
     private void injectDependency() {
