@@ -12,7 +12,7 @@ import com.capken.catdogtubedomain.video.domain.model.Video
 class LoadVideoPresenter(private val view: VideoCollectionContract.View,
                          private val useCase: LoadVideoUseCase,
                          private val executor: ThreadExecutorProtocol,
-                         var playerPresenter: PlayerContract.Presenter?)
+                         private var playerPresenter: PlayerContract.Presenter?)
     : VideoCollectionContract.Presenter {
 
     //Trigger the additional data load when RecyclerView scroll position is near to bottom
